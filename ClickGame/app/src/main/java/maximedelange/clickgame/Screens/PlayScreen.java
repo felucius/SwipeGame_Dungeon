@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -56,6 +58,7 @@ public class PlayScreen extends AppCompatActivity {
     private EnemyController enemyController = null;
     private Coordinates coordinates = null;
     private Database database = null;
+    private AnimationDrawable skeletonspriteAnim = null;
     private boolean IS_ACTIVATED = false;
     private boolean IS_ACTIVED_ONETIME = false;
     private boolean HIT_PLAYBUTTON = false;
@@ -95,6 +98,47 @@ public class PlayScreen extends AppCompatActivity {
         playGame();
         upgradeScreen();
         statusScreen();
+        spriteAnimation(direction);
+    }
+
+    public void spriteAnimation(int direction){
+        switch(direction){
+            case 0:
+                skeletonspriteAnim = new AnimationDrawable();
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left7), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left8), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left9), 150);
+                break;
+            case 1:
+                skeletonspriteAnim = new AnimationDrawable();
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right7), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right8), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right9), 150);
+                break;
+            case 2:
+                skeletonspriteAnim = new AnimationDrawable();
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up7), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up8), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up9), 150);
+                break;
+        }
     }
 
     public void startGame(){
@@ -558,7 +602,7 @@ public class PlayScreen extends AppCompatActivity {
         linearLayout.addView(enemy);
         linearLayout.addView(enemyHealth);
         linearLayout.addView(enemyHealthTxt);
-
+        spriteDirection(direction);
         // Attack an enemy untill it is killed an created again
         if(IS_KILLABLE){
             damageEnemy();
@@ -610,12 +654,32 @@ public class PlayScreen extends AppCompatActivity {
         });
     }
 
+    public void spriteDirection(int direction){
+        switch(direction){
+            case 0:
+                enemy.setImageResource(R.drawable.left1);
+                enemy.setBackgroundDrawable(skeletonspriteAnim);
+                break;
+            case 1:
+                enemy.setImageResource(R.drawable.right1);
+                enemy.setBackgroundDrawable(skeletonspriteAnim);
+                break;
+            case 2:
+                enemy.setImageResource(R.drawable.up1);
+                enemy.setBackgroundDrawable(skeletonspriteAnim);
+                break;
+        }
+    }
+
     public void getDirection(int direction){
         switch(direction){
             case 0:
                 enemyMovement1 += 1;
                 enemyHealthBar1 += 1;
                 enemyHealthShow1 += 1;
+                enemy.setImageResource(0);
+                enemy.setBackgroundDrawable(skeletonspriteAnim);
+                skeletonspriteAnim.start();
                 enemy.setX(enemyMovement1);
                 enemyHealth.setX(enemyHealthBar1);
                 enemyHealthTxt.setX(enemyHealthShow1);
@@ -624,6 +688,9 @@ public class PlayScreen extends AppCompatActivity {
                 enemyMovement2 -= 1;
                 enemyHealthBar2 -= 1;
                 enemyHealthShow2 -= 1;
+                enemy.setImageResource(0);
+                enemy.setBackgroundDrawable(skeletonspriteAnim);
+                skeletonspriteAnim.start();
                 enemy.setX(enemyMovement2);
                 enemyHealth.setX(enemyHealthBar2);
                 enemyHealthTxt.setX(enemyHealthShow2);
@@ -632,6 +699,9 @@ public class PlayScreen extends AppCompatActivity {
                 enemyMovement3 -= 1;
                 enemyHealthBar3 -= 1;
                 enemyHealthShow3 -= 1;
+                enemy.setImageResource(0);
+                enemy.setBackgroundDrawable(skeletonspriteAnim);
+                skeletonspriteAnim.start();
                 enemy.setY(enemyMovement3);
                 enemyHealth.setY(enemyHealthBar3);
                 enemyHealthTxt.setY(enemyHealthShow3);
