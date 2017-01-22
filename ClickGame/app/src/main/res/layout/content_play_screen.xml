@@ -145,5 +145,14 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/imgDamage"
+            android:layout_below="@+id/playerHealth"
+            android:layout_alignLeft="@+id/imagePlayer"
+            android:layout_alignStart="@+id/imagePlayer" />
+
     </RelativeLayout>
 </RelativeLayout>

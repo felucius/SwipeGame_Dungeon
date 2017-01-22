@@ -658,14 +658,17 @@ public class PlayScreen extends AppCompatActivity {
         switch(direction){
             case 0:
                 enemy.setImageResource(R.drawable.left1);
+                spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;
             case 1:
                 enemy.setImageResource(R.drawable.right1);
+                spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;
             case 2:
                 enemy.setImageResource(R.drawable.up1);
+                spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;
         }
@@ -720,7 +723,7 @@ public class PlayScreen extends AppCompatActivity {
         final MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this);//,tutorialID);
 
         sequence.setConfig(config);
-        sequence.addSequenceItem(player, "This is Jack", "GOT IT");
+        sequence.addSequenceItem(player, "This is" + playerController.getName() + " and he lives in a castle", "GOT IT");
         sequence.addSequenceItem(enemy, "Jack needs to defend himself from enemies", "GOT IT");
         sequence.addSequenceItem(currentScoreTxt, "For each kill, gain a new score count", "GOT IT");
         sequence.addSequenceItem(btnStart, "After tutorial, press here to start and pause the game", "GOT IT");
