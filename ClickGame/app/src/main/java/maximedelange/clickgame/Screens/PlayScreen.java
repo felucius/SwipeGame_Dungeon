@@ -45,6 +45,7 @@ public class PlayScreen extends AppCompatActivity {
     private int y = 0;
     private String tutorialID = null;
     private int direction;
+    private int enemyNameMovement1, enemyNameMovement2, enemyNameMovement3 = 0;
     private int enemyMovement1, enemyMovement2, enemyMovement3 = 0;
     private int enemyHealthBar1, enemyHealthBar2, enemyHealthBar3 = 0;
     private int enemyHealthShow1, enemyHealthShow2, enemyHealthShow3 = 0;
@@ -58,7 +59,9 @@ public class PlayScreen extends AppCompatActivity {
     private EnemyController enemyController = null;
     private Coordinates coordinates = null;
     private Database database = null;
+    private AnimationDrawable characterspriteAnim = null;
     private AnimationDrawable skeletonspriteAnim = null;
+    private AnimationDrawable backgroundAnim = null;
     private boolean IS_ACTIVATED = false;
     private boolean IS_ACTIVED_ONETIME = false;
     private boolean HIT_PLAYBUTTON = false;
@@ -68,11 +71,13 @@ public class PlayScreen extends AppCompatActivity {
     private RelativeLayout linearLayout = null;
     private ImageView enemy = null;
     private ImageView player = null;
+    private ImageView damage = null;
     private ProgressBar healthBar = null;
     private ProgressBar enemyHealth = null;
     private TextView playerName = null;
     private TextView damageTxt = null;
     private TextView enemyHealthTxt = null;
+    private TextView enemyName = null;
     private TextView playerHealthTxt = null;
     private TextView currentScoreTxt = null;
     private TextView highScoreTxt = null;
@@ -105,40 +110,90 @@ public class PlayScreen extends AppCompatActivity {
         switch(direction){
             case 0:
                 skeletonspriteAnim = new AnimationDrawable();
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left1), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left2), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left3), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left4), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left5), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left6), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left7), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left8), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.left9), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright7), 150);
                 break;
             case 1:
                 skeletonspriteAnim = new AnimationDrawable();
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right1), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right2), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right3), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right4), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right5), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right6), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right7), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right8), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.right9), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft7), 150);
                 break;
             case 2:
                 skeletonspriteAnim = new AnimationDrawable();
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up2), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up3), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up4), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up5), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up6), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up7), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up8), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.up9), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup7), 150);
                 break;
         }
+    }
+
+    public void characterAnimation(int enemyDirection){
+        switch(enemyDirection){
+            case 0:
+                characterspriteAnim = new AnimationDrawable();
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left1), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left2), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left3), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left4), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left5), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left6), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left7), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left8), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left9), 150);
+                break;
+            case 1:
+                characterspriteAnim = new AnimationDrawable();
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right1), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right2), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right3), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right4), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right5), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right6), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right7), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right8), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right9), 150);
+                break;
+            case 2:
+                characterspriteAnim = new AnimationDrawable();
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down1), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down2), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down3), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down4), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down5), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down6), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down7), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down8), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down9), 150);
+                break;
+        }
+
+    }
+
+    public void backgroundAnimation(){
+        backgroundAnim = new AnimationDrawable();
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest1), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest2), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest3), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest4), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest5), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest6), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest7), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest8), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest9), 450);
     }
 
     public void startGame(){
@@ -398,6 +453,7 @@ public class PlayScreen extends AppCompatActivity {
      */
     public void createPlayer(){
         playerHealthTxt = (TextView)findViewById(R.id.txtHealthShow);
+        playerHealthTxt.setTextColor(Color.WHITE);
         playerHealthBegin = playerController.getHealth();
         playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
         player = (ImageView)findViewById(R.id.imagePlayer);
@@ -406,8 +462,12 @@ public class PlayScreen extends AppCompatActivity {
         healthBar.setMax(playerController.getHealth());
         healthBar.setProgress(playerController.getHealth());
 
+        player.setY(100);
+        player.setImageResource(R.drawable.left1);
+
         playerName = (TextView)findViewById(R.id.txtName);
         playerName.setTextSize(16);
+        playerName.setTextColor(Color.WHITE);
         playerName.setTypeface(null, Typeface.BOLD);
         playerName.setText(playerController.getName());
         playerName.setY(100);
@@ -420,7 +480,9 @@ public class PlayScreen extends AppCompatActivity {
         //scoreBar = getSupportActionBar();
         //scoreBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.black)));
         currentScoreTxt.setText("score: " + score);
+        currentScoreTxt.setTextColor(Color.WHITE);
         highScoreTxt.setText("high score: " + highScore);
+        highScoreTxt.setTextColor(Color.WHITE);
         //scoreBar.setTitle("high score: " + highScore);
         if(score > highScore){
             highScoreTxt.setText("high score: " + score);
@@ -443,6 +505,7 @@ public class PlayScreen extends AppCompatActivity {
             // Player has been killed. Specs are being set for the death of the player
             if(healthBar.getProgress() <= 1){
                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + 0));
+                playerHealthTxt.setTextColor(Color.WHITE);
                 healthBar.setProgress(0);
                 Toast.makeText(PlayScreen.this, "GAME OVER", Toast.LENGTH_LONG).show();
                 countDownMovement.onFinish();
@@ -475,8 +538,8 @@ public class PlayScreen extends AppCompatActivity {
                         break;
                     case 2:
                         enemyMovement3 = 1340;
-                        enemyHealthBar3 = 1490;
-                        enemyHealthShow3 = 1510;
+                        enemyHealthBar3 = 1590;
+                        enemyHealthShow3 = 1610;
                         enemy.setY(enemyMovement3);
                         enemyHealth.setY(enemyHealthBar3);
                         enemyHealthTxt.setY(enemyHealthShow3);
@@ -526,19 +589,31 @@ public class PlayScreen extends AppCompatActivity {
             }
         });
 
+        linearLayout.setBackgroundResource(R.drawable.backgroundforest1);
+        backgroundAnimation();
+        linearLayout.setBackgroundDrawable(backgroundAnim);
+        backgroundAnim.start();
+
         coordinates = new Coordinates();
         playerController = new PlayerController("Jack");
         enemyController = new EnemyController();
 
+        //damage = new ImageView(this);
+
         btnStart = (ImageButton)findViewById(R.id.btnPlay);
+        btnStart.setImageResource(R.drawable.btnplay2);
         btnUpgradeScreen = (ImageButton)findViewById(R.id.btnUpgrade);
+        btnUpgradeScreen.setImageResource(R.drawable.btnarmory2);
         btnStatusScreen = (ImageButton)findViewById(R.id.btnStatus);
+        btnStatusScreen.setImageResource(R.drawable.btnstatistic2);
 
         damageTxt = (TextView)findViewById(R.id.txtDamage);
         damageTxt.setTextSize(14);
+        damageTxt.setTextColor(Color.WHITE);
         damageTxt.setText(String.valueOf("DMG: " + playerController.getDamage()));
 
         playerGold = (TextView)findViewById(R.id.txtGold);
+        playerGold.setTextColor(Color.WHITE);
         playerGold.setTextSize(14);
         playerGold.setText("G: " + playerController.getGold());
         highScoreTxt = (TextView)findViewById(R.id.txtHighScore);
@@ -562,6 +637,9 @@ public class PlayScreen extends AppCompatActivity {
         enemyMovement1 = 0;
         enemyMovement2 = 855;
         enemyMovement3 = 1435;
+        enemyNameMovement1 = 0;
+        enemyNameMovement2 = 855;
+        enemyNameMovement3 = 1435;
         direction = coordinates.createCoordinates();
         x = coordinates.getxPos();
         y = coordinates.getyPos();
@@ -569,10 +647,10 @@ public class PlayScreen extends AppCompatActivity {
         // Enemy health
         enemyHealthBar1 = 0;
         enemyHealthBar2 = 855;
-        enemyHealthBar3 = 1585;
+        enemyHealthBar3 = 1685;
         enemyHealthShow1 = 0;
         enemyHealthShow2 = 855;
-        enemyHealthShow3 = 1605;
+        enemyHealthShow3 = 1705;
         enemyHealthCounter += 1;
         enemyController.setHealth(enemyHealthCounter);
         enemyHealth = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
@@ -583,9 +661,11 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealth.setX(x);
         enemyHealth.setY(y + 150);
         enemyHealthTxt = new TextView(this);
+        enemyHealthTxt.setTextColor(Color.WHITE);
         enemyHealthTxt.setTypeface(null, Typeface.BOLD);
         enemyHealthTxt.setX(x);
         enemyHealthTxt.setY(y + 170);
+        enemyName = new TextView(this);
 
         // If statement for correcting the layout of displaying health
         if(enemyHealthBegin >= 10){
@@ -602,6 +682,7 @@ public class PlayScreen extends AppCompatActivity {
         linearLayout.addView(enemy);
         linearLayout.addView(enemyHealth);
         linearLayout.addView(enemyHealthTxt);
+        linearLayout.addView(enemyName);
         spriteDirection(direction);
         // Attack an enemy untill it is killed an created again
         if(IS_KILLABLE){
@@ -614,6 +695,13 @@ public class PlayScreen extends AppCompatActivity {
         enemy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Player sprite points towards enemy
+                characterAnimation(direction);
+                player.setImageResource(0);
+                player.setBackgroundDrawable(characterspriteAnim);
+                characterspriteAnim.start();
+                characterspriteAnim.setOneShot(true);
+
                 enemyHealthCounter -= playerController.getDamage() ;
                 enemyController.setHealth(enemyHealthCounter);
                 enemyHealth.setProgress(enemyHealthCounter);
@@ -632,6 +720,7 @@ public class PlayScreen extends AppCompatActivity {
                     // Retrieve gold from killed enemy.
                     int gold = enemyController.getGold();
                     playerController.setGold(gold);
+                    playerGold.setTextColor(Color.WHITE);
                     playerGold.setText("gold: " + playerController.getGold());
 
                     currentScore ++;
@@ -657,17 +746,17 @@ public class PlayScreen extends AppCompatActivity {
     public void spriteDirection(int direction){
         switch(direction){
             case 0:
-                enemy.setImageResource(R.drawable.left1);
+                enemy.setImageResource(R.drawable.slugright1);
                 spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;
             case 1:
-                enemy.setImageResource(R.drawable.right1);
+                enemy.setImageResource(R.drawable.slugleft1);
                 spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;
             case 2:
-                enemy.setImageResource(R.drawable.up1);
+                enemy.setImageResource(R.drawable.slugup1);
                 spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;

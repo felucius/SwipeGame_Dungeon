@@ -19,8 +19,8 @@ public class Coordinates {
     // Constructor
     public Coordinates(){
         randomNumber = new Random();
-        left = new int[]{0, 750};
-        right = new int[]{850, 750};
+        left = new int[]{0, 850};
+        right = new int[]{850, 850};
         bottom = new int[]{420, 1435};
     }
 

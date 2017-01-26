@@ -22,6 +22,7 @@ public class Enemy {
     private int damage;
     private ImageView imageView;
     private Rect size;
+    private String name;
 
     // Constructor
     public Enemy(int xPos, int yPos, int gold, int damage){
@@ -37,6 +38,14 @@ public class Enemy {
     }
 
     // Methods
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
     public void setxPos(int xPos){
         this.xPos = xPos;
     }

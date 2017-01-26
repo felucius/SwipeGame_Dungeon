@@ -5,10 +5,6 @@
     android:id="@+id/content_home_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="maximedelange.clickgame.Screens.PlayScreen"
     tools:showIn="@layout/activity_play_screen">
@@ -79,7 +75,8 @@
             android:id="@+id/btnUpgrade"
             android:layout_alignTop="@+id/btnStatus"
             android:layout_alignLeft="@+id/playerHealth"
-            android:layout_alignStart="@+id/playerHealth" />
+            android:layout_alignStart="@+id/playerHealth"
+            android:background="@android:color/transparent"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -88,7 +85,8 @@
             android:id="@+id/btnPlay"
             android:layout_alignTop="@+id/btnUpgrade"
             android:layout_alignRight="@+id/txtScore"
-            android:layout_alignEnd="@+id/txtScore" />
+            android:layout_alignEnd="@+id/txtScore"
+            android:background="@android:color/transparent"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -98,7 +96,8 @@
             android:layout_marginTop="32dp"
             android:layout_below="@+id/txtHighScore"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"/>
 
         <TextView
             android:text="TextView"
@@ -144,15 +143,6 @@
             android:layout_below="@+id/txtGold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/imgDamage"
-            android:layout_below="@+id/playerHealth"
-            android:layout_alignLeft="@+id/imagePlayer"
-            android:layout_alignStart="@+id/imagePlayer" />
 
     </RelativeLayout>
 </RelativeLayout>
