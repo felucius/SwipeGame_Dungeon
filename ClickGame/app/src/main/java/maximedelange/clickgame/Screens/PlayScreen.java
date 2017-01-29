@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,6 +13,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewManager;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,10 +23,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import maximedelange.clickgame.Controller.EnemyController;
 import maximedelange.clickgame.Controller.PlayerController;
 import maximedelange.clickgame.Database.Database;
-import maximedelange.clickgame.Domain.Coordinates;
+import maximedelange.clickgame.Domain.DamageCoordinates;
+import maximedelange.clickgame.Domain.EnemyCoordinates;
 import maximedelange.clickgame.R;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -43,8 +46,11 @@ public class PlayScreen extends AppCompatActivity {
     private int yPos = 0;
     private int x = 0;
     private int y = 0;
+    private int damageX = 0;
+    private int damageY = 0;
     private String tutorialID = null;
     private int direction;
+    private int damageMovement1, damageMovement2, damageMovement3 = 0;
     private int enemyNameMovement1, enemyNameMovement2, enemyNameMovement3 = 0;
     private int enemyMovement1, enemyMovement2, enemyMovement3 = 0;
     private int enemyHealthBar1, enemyHealthBar2, enemyHealthBar3 = 0;
@@ -55,9 +61,11 @@ public class PlayScreen extends AppCompatActivity {
     private int enemyHealthBegin = 0;
     private boolean isColliding = false;
     private CountDownTimer countDownMovement = null;
+    private CountDownTimer damageMovement = null;
     private PlayerController playerController = null;
     private EnemyController enemyController = null;
-    private Coordinates coordinates = null;
+    private DamageCoordinates damageCoordinates = null;
+    private EnemyCoordinates enemyCoordinates = null;
     private Database database = null;
     private AnimationDrawable characterspriteAnim = null;
     private AnimationDrawable skeletonspriteAnim = null;
@@ -66,6 +74,8 @@ public class PlayScreen extends AppCompatActivity {
     private boolean IS_ACTIVED_ONETIME = false;
     private boolean HIT_PLAYBUTTON = false;
     private boolean IS_KILLABLE = false;
+    private boolean IS_DAMAGED = false;
+    private boolean IS_SHOOTING = false;
 
     // GUI components
     private RelativeLayout linearLayout = null;
@@ -110,33 +120,33 @@ public class PlayScreen extends AppCompatActivity {
         switch(direction){
             case 0:
                 skeletonspriteAnim = new AnimationDrawable();
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright1), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright2), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright3), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright4), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright5), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright6), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugright7), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1sword1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1sword2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1sword3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1sword4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1sword5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1sword6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1sword7), 150);
                 break;
             case 1:
                 skeletonspriteAnim = new AnimationDrawable();
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft1), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft2), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft3), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft4), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft5), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft6), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugleft7), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordr1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordr2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordr3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordr4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordr5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordr6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordr7), 150);
                 break;
             case 2:
                 skeletonspriteAnim = new AnimationDrawable();
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup1), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup2), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup3), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup4), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup5), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup6), 150);
-                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.slugup7), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordup1), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordup2), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordup3), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordup4), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordup5), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordup6), 150);
+                skeletonspriteAnim.addFrame(getResources().getDrawable(R.drawable.enemy1swordup7), 150);
                 break;
         }
     }
@@ -145,39 +155,33 @@ public class PlayScreen extends AppCompatActivity {
         switch(enemyDirection){
             case 0:
                 characterspriteAnim = new AnimationDrawable();
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left1), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left2), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left3), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left4), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left5), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left6), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left7), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left8), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.left9), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1l1), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1l2), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1l3), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1l4), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1l5), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1l6), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1l7), 150);
                 break;
             case 1:
                 characterspriteAnim = new AnimationDrawable();
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right1), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right2), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right3), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right4), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right5), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right6), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right7), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right8), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.right9), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1r1), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1r2), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1r3), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1r4), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1r5), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1r6), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1r7), 150);
                 break;
             case 2:
                 characterspriteAnim = new AnimationDrawable();
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down1), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down2), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down3), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down4), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down5), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down6), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down7), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down8), 150);
-                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.down9), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1up1), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1up2), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1up3), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1up4), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1up5), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1up6), 150);
+                characterspriteAnim.addFrame(getResources().getDrawable(R.drawable.characterarcher1up7), 150);
                 break;
         }
 
@@ -185,29 +189,23 @@ public class PlayScreen extends AppCompatActivity {
 
     public void backgroundAnimation(){
         backgroundAnim = new AnimationDrawable();
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest1), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest2), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest3), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest4), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest5), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest6), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest7), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest8), 450);
-        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundforest9), 450);
+        backgroundAnim.addFrame(getResources().getDrawable(R.drawable.backgroundlvl1), 450);
     }
 
     public void startGame(){
         if(HIT_PLAYBUTTON){
             if(!IS_ACTIVED_ONETIME){
-                setEnemyMovement();
                 damageEnemy();
+                setEnemyMovement();
+                setDamageMovement();
                 IS_ACTIVATED = true;
                 IS_KILLABLE = true;
                 IS_ACTIVED_ONETIME = true;
             }
             else if(!IS_ACTIVATED){
-                setEnemyMovement();
                 damageEnemy();
+                setEnemyMovement();
+                setDamageMovement();
                 IS_ACTIVATED = true;
                 IS_KILLABLE = true;
             }
@@ -218,7 +216,6 @@ public class PlayScreen extends AppCompatActivity {
         if(IS_ACTIVATED) {
             countDownMovement.cancel();
             Toast.makeText(PlayScreen.this, "paused", Toast.LENGTH_SHORT).show();
-            enemy.setOnClickListener(null);
             IS_ACTIVATED = false;
         }
     }
@@ -288,7 +285,12 @@ public class PlayScreen extends AppCompatActivity {
                 final Button btnUpgradeDamage = (Button) dialog.findViewById(R.id.btnUpgradeDamage);
 
                 btnUpgradeHealth.setText("upgrade");
+                btnUpgradeHealth.setTextSize(10);
                 btnUpgradeHealth.setTypeface(null, Typeface.BOLD);
+
+                btnUpgradeDamage.setText("upgrade");
+                btnUpgradeDamage.setTextSize(10);
+                btnUpgradeDamage.setTypeface(null, Typeface.BOLD);
 
                 if(playerController.getGold() >= upgradecostHealth) {
                     btnUpgradeHealth.setOnClickListener(new View.OnClickListener() {
@@ -452,6 +454,11 @@ public class PlayScreen extends AppCompatActivity {
     Create a player with some specifications
      */
     public void createPlayer(){
+        //damageCoordinates = new DamageCoordinates();
+        damageMovement1 = 475;
+        damageMovement2 = 475;
+        damageMovement3 = 900;
+
         playerHealthTxt = (TextView)findViewById(R.id.txtHealthShow);
         playerHealthTxt.setTextColor(Color.WHITE);
         playerHealthBegin = playerController.getHealth();
@@ -462,8 +469,8 @@ public class PlayScreen extends AppCompatActivity {
         healthBar.setMax(playerController.getHealth());
         healthBar.setProgress(playerController.getHealth());
 
-        player.setY(100);
-        player.setImageResource(R.drawable.left1);
+        player.setY(80);
+        player.setImageResource(R.drawable.characterarcher1l1);
 
         playerName = (TextView)findViewById(R.id.txtName);
         playerName.setTextSize(16);
@@ -471,6 +478,10 @@ public class PlayScreen extends AppCompatActivity {
         playerName.setTypeface(null, Typeface.BOLD);
         playerName.setText(playerController.getName());
         playerName.setY(100);
+
+
+        //damage.setX(damageX);
+        //damage.setY(damageY);
     }
 
     /*
@@ -489,6 +500,64 @@ public class PlayScreen extends AppCompatActivity {
             highScore = score;
         }
     }
+
+    /*
+    Checks for enemy with player collision
+    */
+    public void damageCollisionDetection(){
+        Rect damageCollision = new Rect();
+        Rect enemyCollision = new Rect();
+
+        damage.getHitRect(damageCollision);
+        enemy.getHitRect(enemyCollision);
+
+        // Collision detection between player and enemy
+        if(Rect.intersects(damageCollision, enemyCollision)){
+            IS_SHOOTING = false;
+            enemy.setClickable(true);
+            enemyHealthCounter -= playerController.getDamage();
+            enemyController.setHealth(enemyHealthCounter);
+            enemyHealth.setProgress(enemyHealthCounter);
+            isColliding = true;
+            //linearLayout.removeView(damage);
+            IS_DAMAGED = false;
+
+            if(enemyHealthBegin >= 10){
+                enemyHealthTxt.setText(String.valueOf(enemyHealthBegin + " / " + enemyController.getHealth()));
+            }else{
+                enemyHealthTxt.setText(String.valueOf("  " + enemyHealthBegin + " / " + enemyController.getHealth()));
+            }
+
+            // If enemy has been killed. Views are destroyed, update score and recreate an new enemy
+            if(enemyHealthCounter < 1){
+                Toast.makeText(PlayScreen.this, "killed", Toast.LENGTH_SHORT).show();
+
+                // Retrieve gold from killed enemy.
+                int gold = enemyController.getGold();
+                playerController.setGold(gold);
+                playerGold.setTextColor(Color.WHITE);
+                playerGold.setText("gold: " + playerController.getGold());
+
+                currentScore ++;
+                linearLayout.removeView(enemy);
+                linearLayout.removeView(enemyHealth);
+                linearLayout.removeView(enemyHealthTxt);
+                enemyHealthCounter = enemyHealthBegin;
+                createEnemy();
+                changeScoreBar(currentScore);
+                if(currentScore >= highScore){
+                    playerController.setHighScore(currentScore);
+                    database.updateHighscore(playerController.getHighScore());
+                }else{
+                    playerController.setScore(currentScore);
+                }
+            }
+
+            linearLayout.removeView(damage);
+
+        }
+    }
+
 
     /*
     Checks for enemy with player collision
@@ -551,6 +620,37 @@ public class PlayScreen extends AppCompatActivity {
 
     /*
     Moves the enemy on the playground
+    */
+    public void setDamageMovement(){
+        player = (ImageView)findViewById(R.id.imagePlayer);
+        damageMovement = new CountDownTimer(10000000 * 1000, 10) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if(isColliding){
+                    isColliding = false;
+                }else{
+                    //getDirection(direction);
+                    //getDamageDirection(direction);
+                    if(IS_DAMAGED){
+                        getDamageDirection(direction);
+                    }
+                    //collisionDetection();
+                    damageCollisionDetection();
+                    isColliding = false;
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+
+        damageMovement.start();
+    }
+
+    /*
+    Moves the enemy on the playground
      */
     public void setEnemyMovement(){
         player = (ImageView)findViewById(R.id.imagePlayer);
@@ -589,23 +689,25 @@ public class PlayScreen extends AppCompatActivity {
             }
         });
 
-        linearLayout.setBackgroundResource(R.drawable.backgroundforest1);
+        linearLayout.setBackgroundResource(R.drawable.backgroundlvl1);
         backgroundAnimation();
         linearLayout.setBackgroundDrawable(backgroundAnim);
         backgroundAnim.start();
 
-        coordinates = new Coordinates();
+        enemyCoordinates = new EnemyCoordinates();
+        damageCoordinates = new DamageCoordinates();
         playerController = new PlayerController("Jack");
         enemyController = new EnemyController();
 
-        //damage = new ImageView(this);
+        damage = new ImageView(this);
+        //damage.setImageResource(R.mipmap.btnarmory);
 
         btnStart = (ImageButton)findViewById(R.id.btnPlay);
-        btnStart.setImageResource(R.drawable.btnplay2);
+        btnStart.setImageResource(R.drawable.btnplay);
         btnUpgradeScreen = (ImageButton)findViewById(R.id.btnUpgrade);
-        btnUpgradeScreen.setImageResource(R.drawable.btnarmory2);
+        btnUpgradeScreen.setImageResource(R.drawable.btnarmory);
         btnStatusScreen = (ImageButton)findViewById(R.id.btnStatus);
-        btnStatusScreen.setImageResource(R.drawable.btnstatistic2);
+        btnStatusScreen.setImageResource(R.drawable.btnstatistics);
 
         damageTxt = (TextView)findViewById(R.id.txtDamage);
         damageTxt.setTextSize(14);
@@ -629,10 +731,12 @@ public class PlayScreen extends AppCompatActivity {
         changeScoreBar(highScore); //??
         changeScoreBar(score);     //??
         createPlayer();
+        //linearLayout.addView(damage);
     }
 
     public void createEnemy(){
         // Enemy position
+        //damageCoordinates = new DamageCoordinates();
         enemyController.setGold(enemyController.randomEnemyGold());
         enemyMovement1 = 0;
         enemyMovement2 = 855;
@@ -640,9 +744,10 @@ public class PlayScreen extends AppCompatActivity {
         enemyNameMovement1 = 0;
         enemyNameMovement2 = 855;
         enemyNameMovement3 = 1435;
-        direction = coordinates.createCoordinates();
-        x = coordinates.getxPos();
-        y = coordinates.getyPos();
+        direction = enemyCoordinates.createCoordinates();
+        //direction = damageCoordinates.createCoordinates();
+        x = enemyCoordinates.getxPos();
+        y = enemyCoordinates.getyPos();
 
         // Enemy health
         enemyHealthBar1 = 0;
@@ -666,6 +771,8 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealthTxt.setX(x);
         enemyHealthTxt.setY(y + 170);
         enemyName = new TextView(this);
+
+
 
         // If statement for correcting the layout of displaying health
         if(enemyHealthBegin >= 10){
@@ -695,18 +802,51 @@ public class PlayScreen extends AppCompatActivity {
         enemy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Player sprite points towards enemy
-                characterAnimation(direction);
-                player.setImageResource(0);
-                player.setBackgroundDrawable(characterspriteAnim);
-                characterspriteAnim.start();
-                characterspriteAnim.setOneShot(true);
 
-                enemyHealthCounter -= playerController.getDamage() ;
-                enemyController.setHealth(enemyHealthCounter);
-                enemyHealth.setProgress(enemyHealthCounter);
+                //IS_SHOOTING = true;
+
+                if(!IS_SHOOTING){
+                    damageMovement1 = 475;
+                    damageMovement2 = 475;
+                    damageMovement3 = 900;
+                    enemy.setClickable(false);
+                    //damage = new ImageView(PlayScreen.this);
+
+
+                    linearLayout.addView(damage);
+                    damage.setVisibility(View.VISIBLE);
+
+                    damageCoordinates.createCoordinates(direction);
+
+                    damageX = damageCoordinates.getxPos();
+                    damageY = damageCoordinates.getyPos();
+
+                    //for(int i = 0; i < 10; i++){
+
+                    damage.setY(damageY);
+                    damage.setX(damageX);
+
+                    // Player sprite points towards enemy
+                    characterAnimation(direction);
+                    player.setImageResource(0);
+                    player.setBackgroundDrawable(characterspriteAnim);
+                    characterspriteAnim.start();
+                    characterspriteAnim.setOneShot(true);
+
+                    IS_DAMAGED = true;
+
+                    damageCollisionDetection();
+
+                    IS_SHOOTING = true;
+                }
+
+
+                //enemyHealthCounter -= playerController.getDamage() ;
+                //enemyController.setHealth(enemyHealthCounter);
+                //enemyHealth.setProgress(enemyHealthCounter);
 
                 // If statement for correcting the layout of displaying health
+                /*
                 if(enemyHealthBegin >= 10){
                     enemyHealthTxt.setText(String.valueOf(enemyHealthBegin + " / " + enemyController.getHealth()));
                 }else{
@@ -739,6 +879,7 @@ public class PlayScreen extends AppCompatActivity {
 
                     // TODO: DO SOMETHING WITH GETTING GOLD FOR UPGRADES
                 }
+                */
             }
         });
     }
@@ -746,19 +887,40 @@ public class PlayScreen extends AppCompatActivity {
     public void spriteDirection(int direction){
         switch(direction){
             case 0:
-                enemy.setImageResource(R.drawable.slugright1);
+                enemy.setImageResource(R.drawable.enemy1sword1);
                 spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;
             case 1:
-                enemy.setImageResource(R.drawable.slugleft1);
+                enemy.setImageResource(R.drawable.enemy1swordr1);
                 spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
                 break;
             case 2:
-                enemy.setImageResource(R.drawable.slugup1);
+                enemy.setImageResource(R.drawable.enemy1swordup1);
                 spriteAnimation(direction);
                 enemy.setBackgroundDrawable(skeletonspriteAnim);
+                break;
+        }
+    }
+
+    public void getDamageDirection(int direction){
+        switch(direction){
+            case 0:
+                //ArrayList<ImageView> views = new ArrayList<>();
+                damageMovement1 -= 5;
+                damage.setImageResource(R.drawable.arrowlvl1al);
+                damage.setX(damageMovement1);
+                break;
+            case 1:
+                damageMovement2 += 5;
+                damage.setImageResource(R.drawable.arrowlvl1ar);
+                damage.setX(damageMovement2);
+                break;
+            case 2:
+                damageMovement3 += 5;
+                damage.setImageResource(R.drawable.arrowlvl1da);
+                damage.setY(damageMovement3);
                 break;
         }
     }

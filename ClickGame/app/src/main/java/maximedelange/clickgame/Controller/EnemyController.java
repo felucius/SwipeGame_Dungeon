@@ -2,7 +2,7 @@ package maximedelange.clickgame.Controller;
 
 import java.util.Random;
 
-import maximedelange.clickgame.Domain.Coordinates;
+import maximedelange.clickgame.Domain.EnemyCoordinates;
 import maximedelange.clickgame.Domain.Enemy;
 
 /**
@@ -15,11 +15,11 @@ public class EnemyController {
     private Enemy enemy;
     private Random amountOfGold;
     private Random amountOfDamage;
-    private Coordinates coordinates;
+    private EnemyCoordinates coordinates;
 
     // Constructor
     public EnemyController(){
-        coordinates = new Coordinates();
+        coordinates = new EnemyCoordinates();
         enemy = new Enemy(0, 0, randomEnemyGold(), randomEnemyGold());
     }
 
