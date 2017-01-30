@@ -69,12 +69,14 @@ public class PlayScreen extends AppCompatActivity {
     private AnimationDrawable characterspriteAnim = null;
     private AnimationDrawable enemySpriteAnimation = null;
     private AnimationDrawable backgroundAnimation = null;
+    private AnimationDrawable characterDamageAnimation = null;
     private boolean IS_ACTIVATED = false;
     private boolean IS_ACTIVED_ONETIME = false;
     private boolean HIT_PLAYBUTTON = false;
     private boolean IS_KILLABLE = false;
     private boolean IS_DAMAGED = false;
     private boolean IS_SHOOTING = false;
+    private boolean IS_ANIMATED = true;
 
     private EnemyAnimationController enemyAnimationController = null;
     private CharacterAnimationController characterAnimationController = null;
@@ -150,15 +152,61 @@ public class PlayScreen extends AppCompatActivity {
     to know in which way the character needs to be looking/animate.
      */
     public void characterAnimation(int enemyDirection){
+        Intent intent = getIntent();
         switch(enemyDirection){
             case 0:
-                characterspriteAnim = characterAnimationController.getCharacterLeft();
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterspriteAnim = characterAnimationController.getArcherLeft();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterspriteAnim = characterAnimationController.getWizardLeft();
+                }
                 break;
             case 1:
-                characterspriteAnim = characterAnimationController.getCharacterRight();
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterspriteAnim = characterAnimationController.getArcherRight();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterspriteAnim = characterAnimationController.getWizardRight();
+                }
                 break;
             case 2:
-                characterspriteAnim = characterAnimationController.getCharacterDown();
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterspriteAnim = characterAnimationController.getArcherDown();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterspriteAnim = characterAnimationController.getWizardDown();
+                }
+                break;
+        }
+    }
+
+    public void damageAnimation(int enemyDirection){
+        Intent intent = getIntent();
+        switch(enemyDirection){
+            case 0:
+                if(intent.getIntExtra("archer", 0) == 1){
+
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterDamageAnimation = attackAnimationController.getFireBallLevel1Left();
+                }
+                break;
+            case 1:
+                if(intent.getIntExtra("archer", 0) == 1){
+
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterDamageAnimation = attackAnimationController.getFireBallLevel1Right();
+                }
+                break;
+            case 2:
+                if(intent.getIntExtra("archer", 0) == 1){
+
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterDamageAnimation = attackAnimationController.getFireBallLevel1Down();
+                }
                 break;
         }
     }
@@ -202,6 +250,7 @@ public class PlayScreen extends AppCompatActivity {
     public void pauseGame(){
         if(IS_ACTIVATED) {
             countDownMovement.cancel();
+            damageMovement.cancel();
             Toast.makeText(PlayScreen.this, "paused", Toast.LENGTH_SHORT).show();
             IS_ACTIVATED = false;
         }
@@ -226,6 +275,7 @@ public class PlayScreen extends AppCompatActivity {
 
                     final Dialog pauseDialog = new Dialog(PlayScreen.this);
                     pauseDialog.setCanceledOnTouchOutside(false);
+                    pauseDialog.setCancelable(false);
                     pauseDialog.setContentView(R.layout.pause_screen);
                     pauseDialog.show();
 
@@ -247,7 +297,7 @@ public class PlayScreen extends AppCompatActivity {
                             // TODO: ALSO GIVE WARNING MESSAGE IF THEY REALLY WANT TO QUIT.
                             startActivity(intent);
                         }
-                });
+                    });
                 }
             }
         });
@@ -266,6 +316,7 @@ public class PlayScreen extends AppCompatActivity {
 
                 final Dialog upgradeDialog = new Dialog(PlayScreen.this);
                 upgradeDialog.setCanceledOnTouchOutside(false);
+                upgradeDialog.setCancelable(false);
                 upgradeDialog.setContentView(R.layout.upgrade_screen);
 
                 // Creating views
@@ -402,6 +453,7 @@ public class PlayScreen extends AppCompatActivity {
 
                 final Dialog statusScreenDialog = new Dialog(PlayScreen.this);
                 statusScreenDialog.setCanceledOnTouchOutside(false);
+                statusScreenDialog.setCancelable(false);
                 statusScreenDialog.setContentView(R.layout.status_screen);
 
                 // Create textviews
@@ -434,6 +486,8 @@ public class PlayScreen extends AppCompatActivity {
     Create a player with some specifications.
      */
     public void createPlayer(){
+        Intent intent = getIntent();
+
         damageMovement1 = 475;
         damageMovement2 = 475;
         damageMovement3 = 900;
@@ -461,7 +515,13 @@ public class PlayScreen extends AppCompatActivity {
         playerName.setY(100);
 
         player.setY(80);
-        player.setImageResource(R.drawable.characterarcher1l1);
+
+        if(intent.getIntExtra("archer", 0) == 1){
+            player.setImageResource(R.drawable.characterarcher1l1);
+        }
+        else if(intent.getIntExtra("wizard", 0) == 2){
+            player.setImageResource(R.drawable.characterwizard1down1left);
+        }
     }
 
     /*
@@ -542,6 +602,7 @@ public class PlayScreen extends AppCompatActivity {
             }
 
             linearLayout.removeView(damage);
+
         }
     }
 
@@ -567,6 +628,7 @@ public class PlayScreen extends AppCompatActivity {
 
                 Toast.makeText(PlayScreen.this, "GAME OVER", Toast.LENGTH_LONG).show();
                 countDownMovement.onFinish();
+                damageMovement.onFinish();
 
                 // Removing information from the enemy that killed the player.
                 linearLayout.removeView(enemy);
@@ -693,13 +755,13 @@ public class PlayScreen extends AppCompatActivity {
         linearLayout.setBackgroundDrawable(backgroundAnimation);
         backgroundAnimation.start();
 
-        // Initialize controller classes
+        // Initialize controller classes.
         enemyCoordinates = new EnemyCoordinates();
         damageCoordinates = new DamageCoordinates();
         playerController = new PlayerController("Jack");
         enemyController = new EnemyController();
 
-        // Create views
+        // Create views.
         damage = new ImageView(this);
         btnStart = (ImageButton)findViewById(R.id.btnPlay);
         btnUpgradeScreen = (ImageButton)findViewById(R.id.btnUpgrade);
@@ -709,12 +771,12 @@ public class PlayScreen extends AppCompatActivity {
         highScoreTxt = (TextView)findViewById(R.id.txtHighScore);
         currentScoreTxt = (TextView)findViewById(R.id.txtScore);
 
-        // Setting the information to the created views
+        // Setting the information to the created views.
         btnStart.setImageResource(R.drawable.btnplay);
         btnUpgradeScreen.setImageResource(R.drawable.btnarmory);
         btnStatusScreen.setImageResource(R.drawable.btnstatistics);
 
-        // Displaying information
+        // Displaying information.
         damageTxt.setTextSize(14);
         damageTxt.setTextColor(Color.WHITE);
         damageTxt.setText(String.valueOf("DMG: " + playerController.getDamage()));
@@ -728,19 +790,21 @@ public class PlayScreen extends AppCompatActivity {
         currentScoreTxt.setText(String.valueOf(currentScore));
         highScore = Integer.valueOf(database.getHighscore());
 
-        // Initialize the basic price for an upgrade
+        // Initialize the basic price for an upgrade.
         upgradecostHealth = 100;
         upgradecostDamage = 100;
         changeScoreBar(highScore);
         changeScoreBar(score);
 
-        // Creating a new player
+        // Creating a new player.
         createPlayer();
-        // Initialize screens
+        // Initialize screens.
         upgradeScreen();
         statusScreen();
-        // Get enemy sprite direction
+        // Get enemy sprite direction.
         enemyAnimation(direction);
+        // Damage enemy by locating it's direction.
+        damageAnimation(direction);
     }
 
     /*
@@ -840,6 +904,7 @@ public class PlayScreen extends AppCompatActivity {
                     damage.setX(damageX);
 
                     // Player sprite points towards enemy
+                    // Shoots enemy with an animation that is executed one time only per shot
                     characterAnimation(direction);
                     player.setImageResource(0);
                     player.setBackgroundDrawable(characterspriteAnim);
@@ -875,21 +940,50 @@ public class PlayScreen extends AppCompatActivity {
     }
 
     public void getDamageDirection(int direction){
+        Intent intent = getIntent();
         switch(direction){
             case 0:
-                damageMovement1 -= 5;
-                damage.setImageResource(R.drawable.arrowlvl1al);
-                damage.setX(damageMovement1);
+                if(intent.getIntExtra("archer", 0) == 1){
+                    damage.setImageResource(R.drawable.arrowlvl1al);
+                    damageMovement1 -= 5;
+                    damage.setX(damageMovement1);
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement1 -= 5;
+                    damage.setX(damageMovement1);
+                }
+
                 break;
             case 1:
-                damageMovement2 += 5;
-                damage.setImageResource(R.drawable.arrowlvl1ar);
-                damage.setX(damageMovement2);
+                if(intent.getIntExtra("archer", 0) == 1){
+                    damage.setImageResource(R.drawable.arrowlvl1ar);
+                    damageMovement2 += 5;
+                    damage.setX(damageMovement2);
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement2 += 5;
+                    damage.setX(damageMovement2);
+                }
                 break;
             case 2:
-                damageMovement3 += 5;
-                damage.setImageResource(R.drawable.arrowlvl1da);
-                damage.setY(damageMovement3);
+                if(intent.getIntExtra("archer", 0) == 1){
+                    damageMovement3 += 5;
+                    damage.setImageResource(R.drawable.arrowlvl1da);
+                    damage.setY(damageMovement3);
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement3 += 5;
+                    damage.setY(damageMovement3);
+                }
                 break;
         }
     }
@@ -930,5 +1024,10 @@ public class PlayScreen extends AppCompatActivity {
                 enemyHealthTxt.setY(enemyHealthShow3);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing here
     }
 }

@@ -53,7 +53,7 @@ public class StartScreen extends AppCompatActivity {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PlayScreen.class);
+                Intent intent = new Intent(v.getContext(), CharacterScreen.class);
                 intent.putExtra("score", score);
                 startActivity(intent);
             }
@@ -75,7 +75,5 @@ public class StartScreen extends AppCompatActivity {
         textScore = (TextView)findViewById(R.id.txtHighscore);
         score = Integer.valueOf(database.getHighscore());
         textScore.setText(String.valueOf(score));
-       //actionBar = getSupportActionBar();
-        //actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.black)));
     }
 }
