@@ -12,10 +12,10 @@ import maximedelange.clickgame.Domain.Enemy;
 public class EnemyController {
 
     // Fields
-    private Enemy enemy;
-    private Random amountOfGold;
-    private Random amountOfDamage;
-    private EnemyCoordinates coordinates;
+    private Enemy enemy = null;
+    private Random amountOfGold = null;
+    private Random amountOfDamage = null;
+    private EnemyCoordinates coordinates = null;
 
     // Constructor
     public EnemyController(){

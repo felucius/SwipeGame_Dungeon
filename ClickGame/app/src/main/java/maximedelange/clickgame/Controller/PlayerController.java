@@ -10,7 +10,7 @@ import maximedelange.clickgame.R;
 public class PlayerController {
 
     // Fields
-    private Player player;
+    private Player player = null;
 
     // Constructor
     public PlayerController(String name){
