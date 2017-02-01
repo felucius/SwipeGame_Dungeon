@@ -19,8 +19,8 @@ public class DamageCoordinates {
     // Constructor
     public DamageCoordinates(){
         //randomNumber = new Random();
-        left = new int[]{475, 900};
-        right = new int[]{475, 900};
+        left = new int[]{465, 900};
+        right = new int[]{495, 900};
         bottom = new int[]{475, 900};
     }
 

@@ -39,6 +39,7 @@ public class PlayScreen extends AppCompatActivity {
     // Fields
     private int upgradecostHealth = 0;
     private int upgradecostDamage = 0;
+    private int upgradecostAttackspeed = 0;
     private int score = 0;
     private int currentScore = 0;
     private int highScore = 0;
@@ -93,6 +94,7 @@ public class PlayScreen extends AppCompatActivity {
     private ProgressBar enemyHealth = null;
     private TextView playerName = null;
     private TextView damageTxt = null;
+    private TextView attackspeedTxt = null;
     private TextView enemyHealthTxt = null;
     private TextView enemyName = null;
     private TextView playerHealthTxt = null;
@@ -186,26 +188,26 @@ public class PlayScreen extends AppCompatActivity {
         switch(enemyDirection){
             case 0:
                 if(intent.getIntExtra("archer", 0) == 1){
-
+                    characterDamageAnimation = attackAnimationController.getArrowLeft();
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterDamageAnimation = attackAnimationController.getFireBallLevel1Left();
+                    characterDamageAnimation = attackAnimationController.getSpellLeft();
                 }
                 break;
             case 1:
                 if(intent.getIntExtra("archer", 0) == 1){
-
+                    characterDamageAnimation = attackAnimationController.getArrowRight();
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterDamageAnimation = attackAnimationController.getFireBallLevel1Right();
+                    characterDamageAnimation = attackAnimationController.getSpellRight();
                 }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
-
+                    characterDamageAnimation = attackAnimationController.getArrowDown();
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterDamageAnimation = attackAnimationController.getFireBallLevel1Down();
+                    characterDamageAnimation = attackAnimationController.getSpellDown();
                 }
                 break;
         }
@@ -220,8 +222,10 @@ public class PlayScreen extends AppCompatActivity {
     public void startGame(){
         // Active only once
         if(HIT_PLAYBUTTON){
+            btnStart.setImageResource(R.drawable.btnplay);
             // Activate gameplay after the first time start has been pressed
             if(!IS_ACTIVED_ONETIME){
+                btnStart.setImageResource(R.drawable.btnplay);
                 damageEnemy();
                 setEnemyMovement();
                 setDamageMovement();
@@ -234,6 +238,7 @@ public class PlayScreen extends AppCompatActivity {
             has been pressed
              */
             else if(!IS_ACTIVATED){
+                btnStart.setImageResource(R.drawable.btnplay);
                 damageEnemy();
                 setEnemyMovement();
                 setDamageMovement();
@@ -249,6 +254,7 @@ public class PlayScreen extends AppCompatActivity {
      */
     public void pauseGame(){
         if(IS_ACTIVATED) {
+            btnStart.setImageResource(R.drawable.btnpause);
             countDownMovement.cancel();
             damageMovement.cancel();
             Toast.makeText(PlayScreen.this, "paused", Toast.LENGTH_SHORT).show();
@@ -324,14 +330,19 @@ public class PlayScreen extends AppCompatActivity {
                 final TextView upgradeHealthCost = (TextView)upgradeDialog.findViewById(R.id.upgradeHealthCostTxt);
                 final TextView upgradeDamage = (TextView)upgradeDialog.findViewById(R.id.upgradeDamageTxt);
                 final TextView upgradeDamageCost = (TextView)upgradeDialog.findViewById(R.id.upgradeDamageCostTxt);
-                final Button btnUpgradeHealth = (Button) upgradeDialog.findViewById(R.id.btnUpgradeHealth);
-                final Button btnUpgradeDamage = (Button) upgradeDialog.findViewById(R.id.btnUpgradeDamage);
+                final TextView upgradeAttackspeed = (TextView)upgradeDialog.findViewById(R.id.upgradeAttackspeedTxt);
+                final TextView upgradeAttackspeedCost = (TextView)upgradeDialog.findViewById(R.id.upgradeAttackspeedCostTxt);
+                final Button btnUpgradeHealth = (Button)upgradeDialog.findViewById(R.id.btnUpgradeHealth);
+                final Button btnUpgradeDamage = (Button)upgradeDialog.findViewById(R.id.btnUpgradeDamage);
+                final Button btnUpgradeAttackspeed = (Button)upgradeDialog.findViewById(R.id.btnUpgradeAttackspeed);
 
                 // Setting content to the views
                 upgradeHealth.setText(String.valueOf(playerController.getHealth()));
                 upgradeDamage.setText(String.valueOf(playerController.getDamage()));
+                upgradeAttackspeed.setText(String.valueOf(playerController.getAttackspeed()));
                 upgradeHealthCost.setText(String.valueOf("G " + upgradecostHealth));
                 upgradeDamageCost.setText(String.valueOf("G " + upgradecostDamage));
+                upgradeAttackspeedCost.setText(String.valueOf("G " + upgradecostAttackspeed));
 
                 // Health
                 btnUpgradeHealth.setText("upgrade");
@@ -343,6 +354,11 @@ public class PlayScreen extends AppCompatActivity {
                 btnUpgradeDamage.setTextSize(10);
                 btnUpgradeDamage.setTypeface(null, Typeface.BOLD);
 
+                // Attack speed
+                btnUpgradeAttackspeed.setText("upgrade");
+                btnUpgradeAttackspeed.setTextSize(10);
+                btnUpgradeAttackspeed.setTypeface(null, Typeface.BOLD);
+
                 if(playerController.getGold() >= upgradecostHealth) {
                     btnUpgradeHealth.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -351,19 +367,19 @@ public class PlayScreen extends AppCompatActivity {
                             upgradeDialog.create();
                             if (playerController.getGold() >= upgradecostHealth) {
                                 playerController.setBuyUpgrade(upgradecostHealth);
-                                // Adding 1 to the amount of upgrades
-                                playerController.setAmountOfUpgrades(1);
+                                // Adding 1 to the amount of upgrades.
+                                playerController.setAmountOfHealthUpgrades(1);
 
                                 /*
                                  Checking for the amount of upgrades. For each upgrade the price
-                                 is getting up by 1.6.
+                                 is getting up by percentage
                                  */
-                                for (int i = 0; i < playerController.getAmoutOfUpgrades(); i++) {
-                                    upgradecostHealth *= 1.6;
+                                for (int i = 0; i < playerController.getAmountOfHealthUpgrades(); i++) {
+                                    upgradecostHealth *= 1.5;
                                 }
 
                                 // Adding the new information.
-                                playerController.setUpgradeHealth(1);
+                                playerController.setUpgradeHealth(3);
 
                                 // Retrieve the new information.
                                 playerHealthBegin = playerController.getHealth();
@@ -399,14 +415,14 @@ public class PlayScreen extends AppCompatActivity {
                             if (playerController.getGold() >= upgradecostDamage) {
                                 playerController.setBuyUpgrade(upgradecostDamage);
                                 // Adding 1 to the amount of upgrades
-                                playerController.setAmountOfUpgrades(1);
+                                playerController.setAmountOfDamageUpgrades(1);
 
                                 /*
                                  Checking for the amount of upgrades. For each upgrade the price
-                                 is getting up by 2.3.
+                                 is getting up by a percentage.
                                 */
-                                for (int i = 0; i < playerController.getAmoutOfUpgrades(); i++) {
-                                    upgradecostDamage *= 2.3;
+                                for (int i = 0; i < playerController.getAmountOfDamageUpgrades(); i++) {
+                                    upgradecostDamage *= 1.5;
                                 }
 
                                 // Adding the new information
@@ -429,6 +445,47 @@ public class PlayScreen extends AppCompatActivity {
                 }
                 else{
                     btnUpgradeDamage.setEnabled(false);
+                }
+
+                if(playerController.getGold() >= upgradecostAttackspeed) {
+                    btnUpgradeAttackspeed.setOnClickListener(new View.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                        @Override
+                        public void onClick(View v) {
+                            upgradeDialog.create();
+                            if (playerController.getGold() >= upgradecostAttackspeed) {
+                                playerController.setBuyUpgrade(upgradecostAttackspeed);
+                                // Adding 1 to the amount of upgrades
+                                playerController.setAmountOfAttackspeedUpgrades(1);
+
+                                /*
+                                 Checking for the amount of upgrades. For each upgrade the price
+                                 is getting up by a percentage.
+                                */
+                                for (int i = 0; i < playerController.getAmountOfAttackspeedUpgrades(); i++) {
+                                    upgradecostAttackspeed *= 1.5;
+                                }
+
+                                // Adding the new information
+                                playerController.setUpgradeAttackspeed(5);
+
+                                // Displaying the new information.
+                                attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
+                                upgradeAttackspeed.setText(String.valueOf(playerController.getAttackspeed()));
+                                upgradeAttackspeedCost.setText(String.valueOf("G " + upgradecostAttackspeed));
+                                playerGold.setText(String.valueOf(playerController.getGold()));
+
+                                if (playerController.getGold() <= upgradecostAttackspeed) {
+                                    btnUpgradeAttackspeed.setEnabled(false);
+                                }
+                            } else {
+                                btnUpgradeAttackspeed.setEnabled(false);
+                            }
+                        }
+                    });
+                }
+                else{
+                    btnUpgradeAttackspeed.setEnabled(false);
                 }
 
                 dismisspopup = (Button)upgradeDialog.findViewById(R.id.dismissPopup);
@@ -461,12 +518,20 @@ public class PlayScreen extends AppCompatActivity {
                 TextView statusTapDamage = (TextView)statusScreenDialog.findViewById(R.id.playerStatusTapDamageTxt);
                 TextView statusHighScore = (TextView)statusScreenDialog.findViewById(R.id.playerStatusHighScoreTxt);
                 TextView statusCurrentScore = (TextView)statusScreenDialog.findViewById(R.id.playerStatusCurrentScoreTxt);
+                TextView statusGold = (TextView)statusScreenDialog.findViewById(R.id.playerStatusGoldTxt);
+                TextView statusHealthUpgrades = (TextView)statusScreenDialog.findViewById(R.id.playerStatusAmountOfHealthUpgradesTxt);
+                TextView statusDamageUpgrades = (TextView)statusScreenDialog.findViewById(R.id.playerStatusAmountOfDamageUpgradesTxt);
+                TextView statusAttackspeedUpgrades = (TextView)statusScreenDialog.findViewById(R.id.playerStatusAmountOfAttackspeedTxt);
 
                 // Displaying the character information
                 statusHealth.setText("HEALTH: " + playerController.getHealth());
                 statusTapDamage.setText("DAMAGE: " + playerController.getDamage());
                 statusHighScore.setText("HIGH SCORE: " + database.getHighscore());
                 statusCurrentScore.setText("SCORE: " + playerController.getScore());
+                statusGold.setText("GOLD: " + playerController.getGold());
+                statusHealthUpgrades.setText("TOTAL HEALTH UPGRADES: " + playerController.getAmountOfHealthUpgrades());
+                statusDamageUpgrades.setText("TOTAL DAMAGE UPGRADES: " + playerController.getAmountOfDamageUpgrades());
+                statusAttackspeedUpgrades.setText("TOTAL ATTACK SPEED UPGRADES: " + playerController.getAmountOfAttackspeedUpgrades());
 
                 statusScreenDialog.show();
 
@@ -488,12 +553,11 @@ public class PlayScreen extends AppCompatActivity {
     public void createPlayer(){
         Intent intent = getIntent();
 
-        damageMovement1 = 475;
-        damageMovement2 = 475;
+        damageMovement1 = 465;
+        damageMovement2 = 495;
         damageMovement3 = 900;
 
         // Getting player information.
-        playerHealthBegin = playerController.getHealth();
         playerHealthBegin = playerController.getHealth();
 
         // Create views.
@@ -572,8 +636,6 @@ public class PlayScreen extends AppCompatActivity {
 
             // If enemy has been killed. Views are destroyed, update score and recreate an new enemy.
             if(enemyHealthCounter < 1){
-                Toast.makeText(PlayScreen.this, "killed", Toast.LENGTH_SHORT).show();
-
                 // Retrieve gold from killed enemy.
                 int gold = enemyController.getGold();
                 playerController.setGold(gold);
@@ -626,9 +688,38 @@ public class PlayScreen extends AppCompatActivity {
                 playerHealthTxt.setTextColor(Color.WHITE);
                 healthBar.setProgress(0);
 
-                Toast.makeText(PlayScreen.this, "GAME OVER", Toast.LENGTH_LONG).show();
-                countDownMovement.onFinish();
-                damageMovement.onFinish();
+                final Dialog gameOverDialog = new Dialog(PlayScreen.this);
+                gameOverDialog.setCanceledOnTouchOutside(false);
+                gameOverDialog.setCancelable(false);
+                gameOverDialog.setContentView(R.layout.gameover_screen);
+                gameOverDialog.show();
+
+                TextView score = (TextView)gameOverDialog.findViewById(R.id.gameOverScore);
+                score.setText("SCORE: " + currentScore);
+
+                Button restartGame = (Button)gameOverDialog.findViewById(R.id.restartGame);
+                restartGame.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gameOverDialog.dismiss();
+                        Intent intent = new Intent(v.getContext(), CharacterScreen.class);
+                        startActivity(intent);
+                    }
+                });
+
+                Button pauseExit = (Button)gameOverDialog.findViewById(R.id.exitGame);
+                pauseExit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), StartScreen.class);
+                        // TODO: SAVING THE HIGHSCORE... IF THERE IS ANY
+                        // TODO: ALSO GIVE WARNING MESSAGE IF THEY REALLY WANT TO QUIT.
+                        startActivity(intent);
+                    }
+                });
+
+                countDownMovement.cancel();
+                damageMovement.cancel();
 
                 // Removing information from the enemy that killed the player.
                 linearLayout.removeView(enemy);
@@ -767,6 +858,7 @@ public class PlayScreen extends AppCompatActivity {
         btnUpgradeScreen = (ImageButton)findViewById(R.id.btnUpgrade);
         btnStatusScreen = (ImageButton)findViewById(R.id.btnStatus);
         damageTxt = (TextView)findViewById(R.id.txtDamage);
+        attackspeedTxt = (TextView)findViewById(R.id.txtAttackspeed);
         playerGold = (TextView)findViewById(R.id.txtGold);
         highScoreTxt = (TextView)findViewById(R.id.txtHighScore);
         currentScoreTxt = (TextView)findViewById(R.id.txtScore);
@@ -777,12 +869,18 @@ public class PlayScreen extends AppCompatActivity {
         btnStatusScreen.setImageResource(R.drawable.btnstatistics);
 
         // Displaying information.
-        damageTxt.setTextSize(14);
+        damageTxt.setTextSize(16);
         damageTxt.setTextColor(Color.WHITE);
         damageTxt.setText(String.valueOf("DMG: " + playerController.getDamage()));
+        damageTxt.setTypeface(null, Typeface.BOLD);
+        attackspeedTxt.setTextSize(16);
+        attackspeedTxt.setTextColor(Color.WHITE);
+        attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
+        attackspeedTxt.setTypeface(null, Typeface.BOLD);
         playerGold.setTextColor(Color.WHITE);
-        playerGold.setTextSize(14);
+        playerGold.setTextSize(16);
         playerGold.setText("G: " + playerController.getGold());
+        playerGold.setTypeface(null, Typeface.BOLD);
         highScoreTxt.setTextSize(24);
         highScoreTxt.setTypeface(null, Typeface.BOLD);
         currentScoreTxt.setTextSize(24);
@@ -793,6 +891,7 @@ public class PlayScreen extends AppCompatActivity {
         // Initialize the basic price for an upgrade.
         upgradecostHealth = 100;
         upgradecostDamage = 100;
+        upgradecostAttackspeed = 100;
         changeScoreBar(highScore);
         changeScoreBar(score);
 
@@ -888,8 +987,8 @@ public class PlayScreen extends AppCompatActivity {
             public void onClick(View v) {
                 if(!IS_SHOOTING){
                     // Set the movement beginning position
-                    damageMovement1 = 475;
-                    damageMovement2 = 475;
+                    damageMovement1 = 465;
+                    damageMovement2 = 495;
                     damageMovement3 = 900;
                     enemy.setClickable(false);
 
@@ -906,6 +1005,7 @@ public class PlayScreen extends AppCompatActivity {
                     // Player sprite points towards enemy
                     // Shoots enemy with an animation that is executed one time only per shot
                     characterAnimation(direction);
+                    damageAnimation(direction);
                     player.setImageResource(0);
                     player.setBackgroundDrawable(characterspriteAnim);
                     characterspriteAnim.start();
@@ -944,44 +1044,50 @@ public class PlayScreen extends AppCompatActivity {
         switch(direction){
             case 0:
                 if(intent.getIntExtra("archer", 0) == 1){
-                    damage.setImageResource(R.drawable.arrowlvl1al);
-                    damageMovement1 -= 5;
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement1 -= playerController.getAttackspeed();
                     damage.setX(damageMovement1);
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     damage.setImageResource(0);
                     damage.setBackgroundDrawable(characterDamageAnimation);
                     characterDamageAnimation.start();
-                    damageMovement1 -= 5;
+                    damageMovement1 -= playerController.getAttackspeed();
                     damage.setX(damageMovement1);
                 }
 
                 break;
             case 1:
                 if(intent.getIntExtra("archer", 0) == 1){
-                    damage.setImageResource(R.drawable.arrowlvl1ar);
-                    damageMovement2 += 5;
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement2 += playerController.getAttackspeed();
                     damage.setX(damageMovement2);
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     damage.setImageResource(0);
                     damage.setBackgroundDrawable(characterDamageAnimation);
                     characterDamageAnimation.start();
-                    damageMovement2 += 5;
+                    damageMovement2 += playerController.getAttackspeed();
                     damage.setX(damageMovement2);
                 }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
-                    damageMovement3 += 5;
-                    damage.setImageResource(R.drawable.arrowlvl1da);
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement3 += playerController.getAttackspeed();
                     damage.setY(damageMovement3);
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     damage.setImageResource(0);
                     damage.setBackgroundDrawable(characterDamageAnimation);
                     characterDamageAnimation.start();
-                    damageMovement3 += 5;
+                    damageMovement3 += playerController.getAttackspeed();
                     damage.setY(damageMovement3);
                 }
                 break;

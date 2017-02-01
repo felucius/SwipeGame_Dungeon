@@ -63,7 +63,7 @@
                 android:layout_height="1dp" />
 
             <ImageView
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 app:srcCompat="@drawable/btndamage"
                 android:id="@+id/imgUpgradeDamage"
                 android:layout_width="75dp"
@@ -72,24 +72,13 @@
                 android:layout_alignParentStart="true" />
 
             <ImageView
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 app:srcCompat="@drawable/btnhealth"
                 android:id="@+id/imgUpgradeHealth"
                 android:layout_width="75dp"
                 android:layout_below="@+id/view12"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
-
-            <TextView
-                android:text="HEALTH"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="#ffffff"
-                android:id="@+id/upgradeHealthTxtShow"
-                android:layout_below="@+id/upgradeHealthCostTxt"
-                android:layout_toRightOf="@+id/imgUpgradeHealth"
-                android:layout_toEndOf="@+id/imgUpgradeHealth" />
 
             <TextView
                 android:text="TextView"
@@ -116,18 +105,6 @@
                 android:layout_marginTop="15dp" />
 
             <TextView
-                android:text="DAMAGE"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="#ffffff"
-                android:id="@+id/upgradeDamageTxtShow"
-                android:layout_below="@+id/btnUpgradeHealth"
-                android:layout_toRightOf="@+id/imgUpgradeDamage"
-                android:layout_toEndOf="@+id/imgUpgradeDamage"
-                android:layout_marginTop="12dp" />
-
-            <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -144,24 +121,102 @@
             <Button
                 android:text="Button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btnupgrade"
-                android:id="@+id/btnUpgradeHealth"
-                android:layout_below="@+id/upgradeHealthCostTxt"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_above="@+id/view2" />
-
-            <Button
-                android:text="Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:background="@drawable/btnupgrade"
                 android:id="@+id/btnUpgradeDamage"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_above="@+id/view4"
-                android:layout_below="@+id/upgradeDamageCostTxt" />
+                android:layout_below="@+id/upgradeDamageCostTxt"
+                android:layout_height="60dp" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view4"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/upgradeAttackspeedCostTxt"
+                android:layout_alignLeft="@+id/btnUpgradeAttackspeed"
+                android:layout_alignStart="@+id/btnUpgradeAttackspeed"
+                android:textAlignment="textEnd" />
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="80dp"
+                app:srcCompat="@drawable/btnattackspeed"
+                android:id="@+id/imgUpgradeAttackspeed"
+                android:layout_below="@+id/view4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/upgradeAttackspeedTxt"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_marginBottom="19dp"
+                android:layout_alignBottom="@+id/imgUpgradeAttackspeed"
+                android:layout_toRightOf="@+id/imgUpgradeAttackspeed"
+                android:layout_toEndOf="@+id/imgUpgradeAttackspeed" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:id="@+id/btnUpgradeAttackspeed"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/btnupgrade"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/upgradeAttackspeedCostTxt"
+                android:layout_alignBottom="@+id/imgUpgradeAttackspeed" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="wrap_content"
+                android:background="@drawable/btnupgrade"
+                android:id="@+id/btnUpgradeHealth"
+                android:layout_below="@+id/upgradeHealthCostTxt"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_height="60dp" />
+
+            <TextView
+                android:text="HEALTH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:id="@+id/upgradeHealthTxtShow"
+                android:layout_below="@+id/upgradeHealthCostTxt"
+                android:layout_toRightOf="@+id/imgUpgradeHealth"
+                android:layout_toEndOf="@+id/imgUpgradeHealth" />
+
+            <TextView
+                android:text="ATT. SPEED"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/upgradeAttackspeedTxtShow"
+                android:textColor="#ffffff"
+                android:textStyle="normal|bold"
+                android:layout_below="@+id/upgradeAttackspeedCostTxt"
+                android:layout_toRightOf="@+id/imgUpgradeAttackspeed"
+                android:layout_toEndOf="@+id/imgUpgradeAttackspeed" />
+
+            <TextView
+                android:text="DAMAGE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:id="@+id/upgradeDamageTxtShow"
+                android:layout_below="@+id/upgradeDamageCostTxt"
+                android:layout_toRightOf="@+id/imgUpgradeDamage"
+                android:layout_toEndOf="@+id/imgUpgradeDamage" />
         </RelativeLayout>
 
         <Button

@@ -3,6 +3,10 @@ package maximedelange.clickgame.Controller;
 import maximedelange.clickgame.Domain.Player;
 import maximedelange.clickgame.R;
 
+import static maximedelange.clickgame.Domain.Player.getStaticAmountOfAttackspeedUpgrades;
+import static maximedelange.clickgame.Domain.Player.getStaticAmountOfHealthUpgrades;
+import static maximedelange.clickgame.Domain.Player.getStaticAmountOfDamageUpgrades;
+
 /**
  * Created by M on 1/10/2017.
  */
@@ -26,6 +30,10 @@ public class PlayerController {
         return player.getHealth();
     }
 
+    public int getStartHealth(){
+        return player.getStartHealth();
+    }
+
     public void setHealth(int health){
         this.player.setHealth(health);
     }
@@ -38,6 +46,10 @@ public class PlayerController {
         this.player.setUpgradeDamage(health);
     }
 
+    public void setUpgradeAttackspeed(int attackspeed){
+        this.player.setUpgradeAttackspeed(attackspeed);
+    }
+
     public String getName(){
         return player.getName();
     }
@@ -48,6 +60,14 @@ public class PlayerController {
 
     public int getDamage(){
         return player.getDamage();
+    }
+
+    public void setAttackspeed(int attackspeed){
+        this.player.setAttackspeed(attackspeed);
+    }
+
+    public int getAttackspeed(){
+        return this.player.getAttackspeed();
     }
 
     public void setGold(int gold){
@@ -78,12 +98,31 @@ public class PlayerController {
         this.player.setHighScore(score);
     }
 
-    public void setAmountOfUpgrades(int amountOfUpgrades){
-        this.player.setAmountOfUpgrades(amountOfUpgrades);
+    public void setAmountOfDamageUpgrades(int amountOfDamageUpgrades){
+        this.player.setAmountOfDamageUpgrades(amountOfDamageUpgrades);
     }
 
-    public int getAmoutOfUpgrades(){
-        return this.player.getAmountOfUpgrades();
+    // This method is static, so it can be called from the CharacterAnimationController
+    public static int getAmountOfDamageUpgrades(){
+        return getStaticAmountOfDamageUpgrades();
+    }
+
+    public void setAmountOfHealthUpgrades(int amountOfHealthUpgrades){
+        this.player.setAmountOfHealthUpgrades(amountOfHealthUpgrades);
+    }
+
+    // This method is static, so it can be called from the CharacterAnimationController
+    public static int getAmountOfHealthUpgrades(){
+        return getStaticAmountOfHealthUpgrades();
+    }
+
+    public void setAmountOfAttackspeedUpgrades(int amountOfAttackspeedUpgrades){
+        this.player.setAmountOfAttackspeedUpgrades(amountOfAttackspeedUpgrades);
+    }
+
+    // This method is static, so it can be called from the CharacterAnimationController
+    public static int getAmountOfAttackspeedUpgrades(){
+        return getStaticAmountOfAttackspeedUpgrades();
     }
 
     public int enemyDoDamage(int damage){

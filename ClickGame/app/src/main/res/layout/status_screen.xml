@@ -104,6 +104,78 @@
                 android:layout_below="@+id/txtScore"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:id="@+id/view10"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:id="@+id/playerStatusGoldTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:text="textview" />
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/txtScore"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/view11"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:id="@+id/playerStatusAmountOfHealthUpgradesTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:text="textview" />
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/txtScore"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/view12"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:id="@+id/playerStatusAmountOfDamageUpgradesTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:text="textview" />
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/txtScore"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/view13"
+                android:layout_height="1dp" />
+
+            <TextView
+                android:id="@+id/playerStatusAmountOfAttackspeedTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:text="textview" />
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/txtScore"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:id="@+id/view9"
                 android:layout_height="1dp" />
 
