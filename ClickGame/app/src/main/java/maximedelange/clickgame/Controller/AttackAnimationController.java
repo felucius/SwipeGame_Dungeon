@@ -2,6 +2,9 @@ package maximedelange.clickgame.Controller;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 
 import maximedelange.clickgame.R;
 
@@ -233,6 +236,90 @@ public class AttackAnimationController {
                 attack.addFrame(context.getResources().getDrawable(R.drawable.arcaneboltlvl4down8), 150);
                 attack.addFrame(context.getResources().getDrawable(R.drawable.arcaneboltlvl4down7), 150);
                 attack.addFrame(context.getResources().getDrawable(R.drawable.arcaneboltlvl4down6), 150);
+                break;
+        }
+
+        return attack;
+    }
+
+    public AnimationDrawable getAxeLeft(){
+        attack = new AnimationDrawable();
+        switch (playerController.getAmountOfDamageUpgrades()){
+            case 0:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left7), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left8), 70);
+                break;
+            default:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left7), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1left8), 70);
+                break;
+        }
+
+        return attack;
+    }
+
+    public AnimationDrawable getAxeRight(){
+        attack = new AnimationDrawable();
+        switch (playerController.getAmountOfDamageUpgrades()){
+            case 0:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right7), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right8), 70);
+                break;
+            default:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right7), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1right8), 70);
+                break;
+        }
+
+        return attack;
+    }
+
+    public AnimationDrawable getAxeDown(){
+        attack = new AnimationDrawable();
+        switch (playerController.getAmountOfDamageUpgrades()){
+            case 0:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down7), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down8), 70);
+                break;
+            default:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down7), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.axelvl1down8), 70);
                 break;
         }
 

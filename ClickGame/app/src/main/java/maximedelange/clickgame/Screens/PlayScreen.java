@@ -163,6 +163,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     characterspriteAnim = characterAnimationController.getWizardLeft();
                 }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterspriteAnim = characterAnimationController.getAxeThrowerLeft();
+                }
                 break;
             case 1:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -171,6 +174,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     characterspriteAnim = characterAnimationController.getWizardRight();
                 }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterspriteAnim = characterAnimationController.getAxeThrowerRight();
+                }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -178,6 +184,9 @@ public class PlayScreen extends AppCompatActivity {
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     characterspriteAnim = characterAnimationController.getWizardDown();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterspriteAnim = characterAnimationController.getAxeThrowerDown();
                 }
                 break;
         }
@@ -193,6 +202,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     characterDamageAnimation = attackAnimationController.getSpellLeft();
                 }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterDamageAnimation = attackAnimationController.getAxeLeft();
+                }
                 break;
             case 1:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -201,6 +213,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     characterDamageAnimation = attackAnimationController.getSpellRight();
                 }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterDamageAnimation = attackAnimationController.getAxeRight();
+                }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -208,6 +223,9 @@ public class PlayScreen extends AppCompatActivity {
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
                     characterDamageAnimation = attackAnimationController.getSpellDown();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterDamageAnimation = attackAnimationController.getAxeDown();
                 }
                 break;
         }
@@ -585,6 +603,9 @@ public class PlayScreen extends AppCompatActivity {
         }
         else if(intent.getIntExtra("wizard", 0) == 2){
             player.setImageResource(R.drawable.characterwizard1down1left);
+        }
+        else if(intent.getIntExtra("axethrower", 0) == 3){
+            player.setImageResource(R.drawable.characteraxethrowerlvl1left1);
         }
     }
 
@@ -1057,6 +1078,13 @@ public class PlayScreen extends AppCompatActivity {
                     damageMovement1 -= playerController.getAttackspeed();
                     damage.setX(damageMovement1);
                 }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement1 -= playerController.getAttackspeed();
+                    damage.setX(damageMovement1);
+                }
 
                 break;
             case 1:
@@ -1074,6 +1102,13 @@ public class PlayScreen extends AppCompatActivity {
                     damageMovement2 += playerController.getAttackspeed();
                     damage.setX(damageMovement2);
                 }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement2 += playerController.getAttackspeed();
+                    damage.setX(damageMovement2);
+                }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -1084,6 +1119,13 @@ public class PlayScreen extends AppCompatActivity {
                     damage.setY(damageMovement3);
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
+                    damage.setImageResource(0);
+                    damage.setBackgroundDrawable(characterDamageAnimation);
+                    characterDamageAnimation.start();
+                    damageMovement3 += playerController.getAttackspeed();
+                    damage.setY(damageMovement3);
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
                     damage.setImageResource(0);
                     damage.setBackgroundDrawable(characterDamageAnimation);
                     characterDamageAnimation.start();

@@ -14,6 +14,7 @@ public class CharacterAnimationController {
     // Fields
     private AnimationDrawable archer = null;
     private AnimationDrawable wizard = null;
+    private AnimationDrawable axeThrower = null;
     private Context context = null;
     private PlayerController playerController = null;
 
@@ -242,5 +243,57 @@ public class CharacterAnimationController {
         }
 
         return wizard;
+    }
+
+    public AnimationDrawable getAxeThrowerLeft(){
+        axeThrower = new AnimationDrawable();
+        switch (playerController.getAmountOfHealthUpgrades()){
+            case 0:
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left1), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left2), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left3), 150);
+                break;
+            default:
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left1), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left2), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left3), 150);
+                break;
+        }
+
+        return axeThrower;
+    }
+
+    public AnimationDrawable getAxeThrowerRight(){
+        axeThrower = new AnimationDrawable();
+        switch (playerController.getAmountOfHealthUpgrades()){
+            case 0:
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right1), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right2), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right3), 150);
+                break;
+            default:
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right1), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right2), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right3), 150);
+                break;
+        }
+
+        return axeThrower;
+    }
+
+    public AnimationDrawable getAxeThrowerDown(){
+        axeThrower = new AnimationDrawable();
+        switch (playerController.getAmountOfHealthUpgrades()){
+            case 0:
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down1), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down2), 150);
+                break;
+            default:
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down1), 150);
+                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down2), 150);
+                break;
+        }
+
+        return axeThrower;
     }
 }

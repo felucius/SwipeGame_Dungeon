@@ -20,6 +20,8 @@ public class CharacterScreen extends AppCompatActivity {
     // Fields
     private ImageView archer = null;
     private ImageView wizard = null;
+    private ImageView axethrower = null;
+    private ImageView necromancer = null;
     private ActionBar actionBar = null;
 
     @Override
@@ -32,6 +34,8 @@ public class CharacterScreen extends AppCompatActivity {
         setupInformation();
         loadArcher();
         loadWizard();
+        loadAxeThrower();
+        loadNecroMancer();
     }
 
     public void loadArcher(){
@@ -57,6 +61,34 @@ public class CharacterScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), PlayScreen.class);
                 intent.putExtra("wizard", 2);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void loadAxeThrower(){
+        axethrower = (ImageView)findViewById(R.id.imgAxethrower);
+        axethrower.setImageResource(R.drawable.axethrowercharacterbig);
+
+        axethrower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PlayScreen.class);
+                intent.putExtra("axethrower", 3);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void loadNecroMancer(){
+        necromancer = (ImageView)findViewById(R.id.imgNecromancer);
+        necromancer.setImageResource(R.drawable.necromancercharacterbig);
+
+        necromancer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PlayScreen.class);
+                intent.putExtra("necromancer", 4);
                 startActivity(intent);
             }
         });
