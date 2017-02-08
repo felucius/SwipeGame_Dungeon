@@ -1,6 +1,7 @@
 package maximedelange.clickgame.Screens;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -36,12 +37,15 @@ public class SplashScreen extends AppCompatActivity {
         loading();
     }
 
+
     public void loading(){
         actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.black)));
+        actionBar.hide();
+        //actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.black)));
         loadTxt = (TextView)findViewById(R.id.txtLoading);
-        loadTxt.setText("loading...");
+        loadTxt.setText("Creative Natural");
         loadTxt.setTextSize(24);
+        loadTxt.setTextColor(Color.RED);
         loadTxt.setTypeface(null, Typeface.BOLD);
         splash = (ImageView)findViewById(R.id.imgSplash);
         animation = AnimationUtils.loadAnimation(getBaseContext(), R.anim.splash);
@@ -67,6 +71,11 @@ public class SplashScreen extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing here
     }
 
 }

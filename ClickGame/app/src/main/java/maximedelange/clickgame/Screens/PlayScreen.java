@@ -77,7 +77,6 @@ public class PlayScreen extends AppCompatActivity {
     private boolean IS_KILLABLE = false;
     private boolean IS_DAMAGED = false;
     private boolean IS_SHOOTING = false;
-    private boolean IS_ANIMATED = true;
 
     private EnemyAnimationController enemyAnimationController = null;
     private CharacterAnimationController characterAnimationController = null;
@@ -166,6 +165,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("axethrower", 0) == 3){
                     characterspriteAnim = characterAnimationController.getAxeThrowerLeft();
                 }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterspriteAnim = characterAnimationController.getNecromancerLeft();
+                }
                 break;
             case 1:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -177,6 +179,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("axethrower", 0) == 3){
                     characterspriteAnim = characterAnimationController.getAxeThrowerRight();
                 }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterspriteAnim = characterAnimationController.getNecromancerRight();
+                }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -187,6 +192,9 @@ public class PlayScreen extends AppCompatActivity {
                 }
                 else if(intent.getIntExtra("axethrower", 0) == 3){
                     characterspriteAnim = characterAnimationController.getAxeThrowerDown();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterspriteAnim = characterAnimationController.getNecromancerDown();
                 }
                 break;
         }
@@ -205,6 +213,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("axethrower", 0) == 3){
                     characterDamageAnimation = attackAnimationController.getAxeLeft();
                 }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterDamageAnimation = attackAnimationController.getNecroSpellLeft();
+                }
                 break;
             case 1:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -216,6 +227,9 @@ public class PlayScreen extends AppCompatActivity {
                 else if(intent.getIntExtra("axethrower", 0) == 3){
                     characterDamageAnimation = attackAnimationController.getAxeRight();
                 }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterDamageAnimation = attackAnimationController.getNecroSpellRight();
+                }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
@@ -226,6 +240,9 @@ public class PlayScreen extends AppCompatActivity {
                 }
                 else if(intent.getIntExtra("axethrower", 0) == 3){
                     characterDamageAnimation = attackAnimationController.getAxeDown();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterDamageAnimation = attackAnimationController.getNecroSpellDown();
                 }
                 break;
         }
@@ -607,6 +624,9 @@ public class PlayScreen extends AppCompatActivity {
         else if(intent.getIntExtra("axethrower", 0) == 3){
             player.setImageResource(R.drawable.characteraxethrowerlvl1left1);
         }
+        else if(intent.getIntExtra("necromancer", 0) == 4){
+            player.setImageResource(R.drawable.characternecromancerlvl1left1);
+        }
     }
 
     /*
@@ -861,11 +881,15 @@ public class PlayScreen extends AppCompatActivity {
             }
         });
 
+        getPlayscreenLevel();
+
+        /*
         // Setting a background for the playfield.
         linearLayout.setBackgroundResource(R.drawable.backgroundlvl1);
         backgroundAnimation = backgroundAnimationController.getBackground();
         linearLayout.setBackgroundDrawable(backgroundAnimation);
         backgroundAnimation.start();
+        */
 
         // Initialize controller classes.
         enemyCoordinates = new EnemyCoordinates();
@@ -1060,77 +1084,76 @@ public class PlayScreen extends AppCompatActivity {
         }
     }
 
+    public void getDamageDirectionLogic(){
+        switch(direction){
+            case 0:
+                damage.setImageResource(0);
+                damage.setBackgroundDrawable(characterDamageAnimation);
+                characterDamageAnimation.start();
+                damageMovement1 -= playerController.getAttackspeed();
+                damage.setX(damageMovement1);
+                break;
+            case 1:
+                damage.setImageResource(0);
+                damage.setBackgroundDrawable(characterDamageAnimation);
+                characterDamageAnimation.start();
+                damageMovement2 += playerController.getAttackspeed();
+                damage.setX(damageMovement2);
+                break;
+            case 2:
+                damage.setImageResource(0);
+                damage.setBackgroundDrawable(characterDamageAnimation);
+                characterDamageAnimation.start();
+                damageMovement3 += playerController.getAttackspeed();
+                damage.setY(damageMovement3);
+                break;
+        }
+    }
+
     public void getDamageDirection(int direction){
         Intent intent = getIntent();
         switch(direction){
             case 0:
                 if(intent.getIntExtra("archer", 0) == 1){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement1 -= playerController.getAttackspeed();
-                    damage.setX(damageMovement1);
+                    getDamageDirectionLogic();
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement1 -= playerController.getAttackspeed();
-                    damage.setX(damageMovement1);
+                    getDamageDirectionLogic();
                 }
                 else if(intent.getIntExtra("axethrower", 0) == 3){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement1 -= playerController.getAttackspeed();
-                    damage.setX(damageMovement1);
+                    getDamageDirectionLogic();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    getDamageDirectionLogic();
                 }
 
                 break;
             case 1:
                 if(intent.getIntExtra("archer", 0) == 1){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement2 += playerController.getAttackspeed();
-                    damage.setX(damageMovement2);
+                    getDamageDirectionLogic();
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement2 += playerController.getAttackspeed();
-                    damage.setX(damageMovement2);
+                    getDamageDirectionLogic();
                 }
                 else if(intent.getIntExtra("axethrower", 0) == 3){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement2 += playerController.getAttackspeed();
-                    damage.setX(damageMovement2);
+                    getDamageDirectionLogic();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    getDamageDirectionLogic();
                 }
                 break;
             case 2:
                 if(intent.getIntExtra("archer", 0) == 1){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement3 += playerController.getAttackspeed();
-                    damage.setY(damageMovement3);
+                    getDamageDirectionLogic();
                 }
                 else if(intent.getIntExtra("wizard", 0) == 2){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement3 += playerController.getAttackspeed();
-                    damage.setY(damageMovement3);
+                    getDamageDirectionLogic();
                 }
                 else if(intent.getIntExtra("axethrower", 0) == 3){
-                    damage.setImageResource(0);
-                    damage.setBackgroundDrawable(characterDamageAnimation);
-                    characterDamageAnimation.start();
-                    damageMovement3 += playerController.getAttackspeed();
-                    damage.setY(damageMovement3);
+                    getDamageDirectionLogic();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    getDamageDirectionLogic();
                 }
                 break;
         }
@@ -1170,6 +1193,34 @@ public class PlayScreen extends AppCompatActivity {
                 enemy.setY(enemyMovement3);
                 enemyHealth.setY(enemyHealthBar3);
                 enemyHealthTxt.setY(enemyHealthShow3);
+                break;
+        }
+    }
+
+    public void getPlayscreenLevel(){
+        Intent intent = getIntent();
+        int level = intent.getIntExtra("level", 0);
+        switch(level){
+            case 1:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl1);
+                break;
+            case 2:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl2);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel2();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
+                break;
+            case 3:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl3);
+            default:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl3v2);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel3();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
                 break;
         }
     }

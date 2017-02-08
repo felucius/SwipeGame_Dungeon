@@ -14,7 +14,8 @@ public class CharacterAnimationController {
     // Fields
     private AnimationDrawable archer = null;
     private AnimationDrawable wizard = null;
-    private AnimationDrawable axeThrower = null;
+    private AnimationDrawable axethrower = null;
+    private AnimationDrawable necromancer = null;
     private Context context = null;
     private PlayerController playerController = null;
 
@@ -246,54 +247,122 @@ public class CharacterAnimationController {
     }
 
     public AnimationDrawable getAxeThrowerLeft(){
-        axeThrower = new AnimationDrawable();
+        axethrower = new AnimationDrawable();
         switch (playerController.getAmountOfHealthUpgrades()){
             case 0:
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left1), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left2), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left3), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left1), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left2), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left3), 150);
                 break;
             default:
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left1), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left2), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left3), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left1), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left2), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1left3), 150);
                 break;
         }
 
-        return axeThrower;
+        return axethrower;
     }
 
     public AnimationDrawable getAxeThrowerRight(){
-        axeThrower = new AnimationDrawable();
+        axethrower = new AnimationDrawable();
         switch (playerController.getAmountOfHealthUpgrades()){
             case 0:
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right1), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right2), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right3), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right1), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right2), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right3), 150);
                 break;
             default:
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right1), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right2), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right3), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right1), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right2), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1right3), 150);
                 break;
         }
 
-        return axeThrower;
+        return axethrower;
     }
 
     public AnimationDrawable getAxeThrowerDown(){
-        axeThrower = new AnimationDrawable();
+        axethrower = new AnimationDrawable();
         switch (playerController.getAmountOfHealthUpgrades()){
             case 0:
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down1), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down2), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down1), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down2), 150);
                 break;
             default:
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down1), 150);
-                axeThrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down2), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down1), 150);
+                axethrower.addFrame(context.getResources().getDrawable(R.drawable.characteraxethrowerlvl1down2), 150);
                 break;
         }
 
-        return axeThrower;
+        return axethrower;
+    }
+
+    public AnimationDrawable getNecromancerLeft(){
+        necromancer = new AnimationDrawable();
+        switch (playerController.getAmountOfHealthUpgrades()){
+            case 0:
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left1), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left2), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left3), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left4), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left5), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left6), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left7), 150);
+                break;
+            default:
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left1), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left2), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left3), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left4), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left5), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left6), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1left7), 150);
+                break;
+        }
+
+        return necromancer;
+    }
+
+    public AnimationDrawable getNecromancerRight(){
+        necromancer = new AnimationDrawable();
+        switch (playerController.getAmountOfHealthUpgrades()){
+            case 0:
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright1), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright2), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright3), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright4), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright5), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright6), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright7), 150);
+                break;
+            default:
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright1), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright2), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright3), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright4), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright5), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright6), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1lright7), 150);
+                break;
+        }
+
+        return necromancer;
+    }
+
+    public AnimationDrawable getNecromancerDown(){
+        necromancer = new AnimationDrawable();
+        switch (playerController.getAmountOfHealthUpgrades()){
+            case 0:
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1down1), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1down2), 150);
+                break;
+            default:
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1down1), 150);
+                necromancer.addFrame(context.getResources().getDrawable(R.drawable.characternecromancerlvl1down2), 150);
+                break;
+        }
+
+        return necromancer;
     }
 }

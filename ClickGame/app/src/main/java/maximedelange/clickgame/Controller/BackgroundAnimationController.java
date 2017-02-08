@@ -27,4 +27,28 @@ public class BackgroundAnimationController {
 
         return background;
     }
+
+    public AnimationDrawable getPlayscreenBackground(){
+        background = new AnimationDrawable();
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundplayscreen1), 70);
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundplayscreen2), 70);
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundplayscreen3), 70);
+
+        return background;
+    }
+
+    public AnimationDrawable getPlayscreenBackgroundlevel2(){
+        background = new AnimationDrawable();
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundlvl21), 70);
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundlvl22), 70);
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundlvl23), 70);
+
+        return background;
+    }
+
+    public AnimationDrawable getPlayscreenBackgroundlevel3(){
+        background = new AnimationDrawable();
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundlvl3v2), 70);
+        return background;
+    }
 }

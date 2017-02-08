@@ -325,4 +325,82 @@ public class AttackAnimationController {
 
         return attack;
     }
+
+    public AnimationDrawable getNecroSpellLeft(){
+        attack = new AnimationDrawable();
+        switch (playerController.getAmountOfDamageUpgrades()){
+            case 0:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left7), 3000);
+                break;
+            default:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1left7), 3000);
+                break;
+        }
+
+        return attack;
+    }
+
+    public AnimationDrawable getNecroSpellRight(){
+        attack = new AnimationDrawable();
+        switch (playerController.getAmountOfDamageUpgrades()){
+            case 0:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right7), 3000);
+                break;
+            default:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1right7), 3000);
+                break;
+        }
+
+        return attack;
+    }
+
+    public AnimationDrawable getNecroSpellDown(){
+        attack = new AnimationDrawable();
+        switch (playerController.getAmountOfDamageUpgrades()){
+            case 0:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down7), 3000);
+                break;
+            default:
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down1), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down2), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down3), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down4), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down5), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down6), 70);
+                attack.addFrame(context.getResources().getDrawable(R.drawable.floatingeyelvl1down7), 3000);
+                break;
+        }
+
+        return attack;
+    }
 }

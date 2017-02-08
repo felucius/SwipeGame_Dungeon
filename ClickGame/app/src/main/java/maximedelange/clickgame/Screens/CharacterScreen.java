@@ -45,7 +45,7 @@ public class CharacterScreen extends AppCompatActivity {
         archer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PlayScreen.class);
+                Intent intent = new Intent(v.getContext(), MapScreen.class);
                 intent.putExtra("archer", 1);
                 startActivity(intent);
             }
@@ -59,7 +59,7 @@ public class CharacterScreen extends AppCompatActivity {
         wizard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PlayScreen.class);
+                Intent intent = new Intent(v.getContext(), MapScreen.class);
                 intent.putExtra("wizard", 2);
                 startActivity(intent);
             }
@@ -73,7 +73,7 @@ public class CharacterScreen extends AppCompatActivity {
         axethrower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PlayScreen.class);
+                Intent intent = new Intent(v.getContext(), MapScreen.class);
                 intent.putExtra("axethrower", 3);
                 startActivity(intent);
             }
@@ -87,7 +87,7 @@ public class CharacterScreen extends AppCompatActivity {
         necromancer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), PlayScreen.class);
+                Intent intent = new Intent(v.getContext(), MapScreen.class);
                 intent.putExtra("necromancer", 4);
                 startActivity(intent);
             }
@@ -96,8 +96,13 @@ public class CharacterScreen extends AppCompatActivity {
 
     public void setupInformation(){
         actionBar = getSupportActionBar();
-        actionBar.setTitle("who is jack?");
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.black)));
+        actionBar.hide();
+        //actionBar.setTitle("who is jack?");
+        //actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.black)));
     }
 
+    @Override
+    public void onBackPressed() {
+        // Do nothing here
+    }
 }

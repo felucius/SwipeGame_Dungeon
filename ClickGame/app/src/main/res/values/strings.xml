@@ -4,4 +4,5 @@
     <string name="title_activity_start_screen">Dungeon Tapper</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="title_activity_character_screen">CharacterScreen</string>
+    <string name="title_activity_map_screen">MapScreen</string>
 </resources>
