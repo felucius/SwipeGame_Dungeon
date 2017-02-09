@@ -51,4 +51,10 @@ public class BackgroundAnimationController {
         background.addFrame(context.getResources().getDrawable(R.drawable.backgroundlvl3v2), 70);
         return background;
     }
+
+    public AnimationDrawable getPlayscreenBackgroundlevel4(){
+        background = new AnimationDrawable();
+        background.addFrame(context.getResources().getDrawable(R.drawable.backgroundlvl4), 70);
+        return background;
+    }
 }

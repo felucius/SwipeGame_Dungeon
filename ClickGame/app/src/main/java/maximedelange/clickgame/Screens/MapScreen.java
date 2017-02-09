@@ -32,6 +32,7 @@ public class MapScreen extends AppCompatActivity {
         loadLevel1();
         loadLevel2();
         loadLevel3();
+        loadLevel4();
         loadGameMap();
     }
 
@@ -68,6 +69,19 @@ public class MapScreen extends AppCompatActivity {
             public void onClick(View v) {
                 intent = new Intent(v.getContext(), PlayScreen.class); // TODO PLAYSCREEN = level 1, 2 etc..
                 intent.putExtra("level", 3);
+                loadCharacter();
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void loadLevel4(){
+        btnGoToLevel = (ImageButton)findViewById(R.id.btnlevel4);
+        btnGoToLevel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(v.getContext(), PlayScreen.class); // TODO PLAYSCREEN = level 1, 2 etc..
+                intent.putExtra("level", 4);
                 loadCharacter();
                 startActivity(intent);
             }

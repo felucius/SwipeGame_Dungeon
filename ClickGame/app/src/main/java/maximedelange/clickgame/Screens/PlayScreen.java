@@ -1214,7 +1214,12 @@ public class PlayScreen extends AppCompatActivity {
                 break;
             case 3:
                 // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl3);
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl3v2);
+                break;
+            case 4:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl4);
+                break;
             default:
                 // Setting a background for the playfield.
                 linearLayout.setBackgroundResource(R.drawable.backgroundlvl3v2);
