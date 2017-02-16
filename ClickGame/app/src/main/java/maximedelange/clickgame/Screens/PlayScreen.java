@@ -1215,15 +1215,35 @@ public class PlayScreen extends AppCompatActivity {
             case 3:
                 // Setting a background for the playfield.
                 linearLayout.setBackgroundResource(R.drawable.backgroundlvl3v2);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel3();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
                 break;
             case 4:
                 // Setting a background for the playfield.
                 linearLayout.setBackgroundResource(R.drawable.backgroundlvl4);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel4();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
+                break;
+            case 5:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl5);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel5();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
+                break;
+            case 6:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl6);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel6();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
                 break;
             default:
                 // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl3v2);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel3();
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl6);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel6();
                 linearLayout.setBackgroundDrawable(backgroundAnimation);
                 backgroundAnimation.start();
                 break;
