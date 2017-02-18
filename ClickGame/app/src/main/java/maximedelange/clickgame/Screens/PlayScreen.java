@@ -125,7 +125,7 @@ public class PlayScreen extends AppCompatActivity {
         // Creating an enemy
         createEnemy();
         // Starts the game
-        playGame();
+        //playGame();
         // Shows tutorial for new players
         //tutorialController.showTutorial("1", player, enemy, currentScoreTxt, btnStart, btnUpgradeScreen, btnStatusScreen);
     }
@@ -304,9 +304,9 @@ public class PlayScreen extends AppCompatActivity {
     to either "Quit" or "Continue" the gameplay.
      */
     public void playGame(){
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //btnStart.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
                 HIT_PLAYBUTTON = true;
                 if(!IS_ACTIVED_ONETIME){
                     startGame();
@@ -314,6 +314,7 @@ public class PlayScreen extends AppCompatActivity {
                 else if(IS_ACTIVATED){
                     pauseGame();
 
+                    /*
                     final Dialog pauseDialog = new Dialog(PlayScreen.this);
                     pauseDialog.setCanceledOnTouchOutside(false);
                     pauseDialog.setCancelable(false);
@@ -329,6 +330,7 @@ public class PlayScreen extends AppCompatActivity {
                         }
                     });
 
+
                     Button pauseExit = (Button)pauseDialog.findViewById(R.id.exitGame);
                     pauseExit.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -339,9 +341,69 @@ public class PlayScreen extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
+                    */
                 }
+            //}
+        //});
+    }
+
+    public void showBeforePlayScreen(){
+        final Dialog beforePlay = new Dialog(PlayScreen.this);
+        beforePlay.setCanceledOnTouchOutside(false);
+        beforePlay.setCancelable(false);
+        beforePlay.setContentView(R.layout.beforeplay_screen);
+
+        // Setting the information to the created views.
+        btnStart = (ImageButton)beforePlay.findViewById(R.id.btnPlay);
+        btnStatusScreen = (ImageButton)beforePlay.findViewById(R.id.btnStatus);
+        btnUpgradeScreen = (ImageButton)beforePlay.findViewById(R.id.btnUpgrade);
+
+        btnStart.setImageResource(R.drawable.btnplay);
+        btnUpgradeScreen.setImageResource(R.drawable.btnarmory);
+        btnStatusScreen.setImageResource(R.drawable.btnstatistics);
+
+        btnStart = (ImageButton)beforePlay.findViewById(R.id.btnPlay);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //System.out.println("REACHED CLICK EVENT BEFOREPLAY");
+                beforePlay.dismiss();
+                playGame();
+                //startGame();
             }
         });
+
+        upgradeScreen();
+        statusScreen();
+
+
+        if(healthBar.getProgress() <= 1){
+            // Displaying the new information.
+            btnStart = (ImageButton)beforePlay.findViewById(R.id.btnPlay);
+            btnStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //System.out.println("REACHED CLICK EVENT BEFOREPLAY");
+                    beforePlay.dismiss();
+                    checkEnemyPosition();
+                    createEnemy();
+
+                    playerController.setHealth(playerHealthBegin);
+                    playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
+                    playerHealthTxt.setTextColor(Color.WHITE);
+                    healthBar.setProgress(playerController.getHealth());
+
+                    // TODO: ENEMY MOVEMENT DOES NOT CORRECT ITSELF WHEN CREATING A NEW ONE
+
+                    countDownMovement.start();
+                    damageMovement.start();
+                    //playGame();
+                    startGame();
+                }
+            });
+        }
+
+        beforePlay.show();
     }
 
     /*
@@ -353,7 +415,7 @@ public class PlayScreen extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                pauseGame();
+                //pauseGame();
 
                 final Dialog upgradeDialog = new Dialog(PlayScreen.this);
                 upgradeDialog.setCanceledOnTouchOutside(false);
@@ -505,7 +567,7 @@ public class PlayScreen extends AppCompatActivity {
                                 playerController.setUpgradeAttackspeed(5);
 
                                 // Displaying the new information.
-                                attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
+                                //attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
                                 upgradeAttackspeed.setText(String.valueOf(playerController.getAttackspeed()));
                                 upgradeAttackspeedCost.setText(String.valueOf("G " + upgradecostAttackspeed));
                                 playerGold.setText(String.valueOf(playerController.getGold()));
@@ -528,7 +590,7 @@ public class PlayScreen extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         upgradeDialog.dismiss();
-                        startGame();
+                        //startGame();
                     }
                 });
 
@@ -541,7 +603,7 @@ public class PlayScreen extends AppCompatActivity {
         btnStatusScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pauseGame();
+                //pauseGame();
 
                 final Dialog statusScreenDialog = new Dialog(PlayScreen.this);
                 statusScreenDialog.setCanceledOnTouchOutside(false);
@@ -575,7 +637,7 @@ public class PlayScreen extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         statusScreenDialog.dismiss();
-                        startGame();
+                        //startGame();
                     }
                 });
             }
@@ -729,6 +791,7 @@ public class PlayScreen extends AppCompatActivity {
                 playerHealthTxt.setTextColor(Color.WHITE);
                 healthBar.setProgress(0);
 
+                /*
                 final Dialog gameOverDialog = new Dialog(PlayScreen.this);
                 gameOverDialog.setCanceledOnTouchOutside(false);
                 gameOverDialog.setCancelable(false);
@@ -738,6 +801,10 @@ public class PlayScreen extends AppCompatActivity {
                 TextView score = (TextView)gameOverDialog.findViewById(R.id.gameOverScore);
                 score.setText("SCORE: " + currentScore);
 
+                */
+                showBeforePlayScreen();
+
+                /*
                 Button restartGame = (Button)gameOverDialog.findViewById(R.id.restartGame);
                 restartGame.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -759,6 +826,7 @@ public class PlayScreen extends AppCompatActivity {
                     }
                 });
 
+                */
                 countDownMovement.cancel();
                 damageMovement.cancel();
 
@@ -774,33 +842,38 @@ public class PlayScreen extends AppCompatActivity {
                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
 
                 // When the enemy hit the player the enemy is spawned to it's begin point.
-                switch (direction){
-                    case 0:
-                        enemyMovement1 = 0;
-                        enemyHealthBar1 = 0;
-                        enemyHealthShow1 = 0;
-                        enemy.setX(enemyMovement1);
-                        enemyHealth.setX(enemyHealthBar1);
-                        enemyHealthTxt.setX(enemyHealthShow1);
-                        break;
-                    case 1:
-                        enemyMovement2 = 855;
-                        enemyHealthBar2 = 855;
-                        enemyHealthShow2 = 855;
-                        enemy.setX(enemyMovement2);
-                        enemyHealth.setX(enemyHealthBar2);
-                        enemyHealthTxt.setX(enemyHealthShow2);
-                        break;
-                    case 2:
-                        enemyMovement3 = 1340;
-                        enemyHealthBar3 = 1590;
-                        enemyHealthShow3 = 1610;
-                        enemy.setY(enemyMovement3);
-                        enemyHealth.setY(enemyHealthBar3);
-                        enemyHealthTxt.setY(enemyHealthShow3);
-                        break;
-                }
+                checkEnemyPosition();
             }
+        }
+    }
+
+    public void checkEnemyPosition(){
+        // When the enemy hit the player the enemy is spawned to it's begin point.
+        switch (direction){
+            case 0:
+                enemyMovement1 = 0;
+                enemyHealthBar1 = 0;
+                enemyHealthShow1 = 0;
+                enemy.setX(enemyMovement1);
+                enemyHealth.setX(enemyHealthBar1);
+                enemyHealthTxt.setX(enemyHealthShow1);
+                break;
+            case 1:
+                enemyMovement2 = 855;
+                enemyHealthBar2 = 855;
+                enemyHealthShow2 = 855;
+                enemy.setX(enemyMovement2);
+                enemyHealth.setX(enemyHealthBar2);
+                enemyHealthTxt.setX(enemyHealthShow2);
+                break;
+            case 2:
+                enemyMovement3 = 1340;
+                enemyHealthBar3 = 1590;
+                enemyHealthShow3 = 1610;
+                enemy.setY(enemyMovement3);
+                enemyHealth.setY(enemyHealthBar3);
+                enemyHealthTxt.setY(enemyHealthShow3);
+                break;
         }
     }
 
@@ -899,29 +972,24 @@ public class PlayScreen extends AppCompatActivity {
 
         // Create views.
         damage = new ImageView(this);
-        btnStart = (ImageButton)findViewById(R.id.btnPlay);
-        btnUpgradeScreen = (ImageButton)findViewById(R.id.btnUpgrade);
-        btnStatusScreen = (ImageButton)findViewById(R.id.btnStatus);
+        //btnStart = (ImageButton)findViewById(R.id.btnPlay);
+        //btnUpgradeScreen = (ImageButton)findViewById(R.id.btnUpgrade);
+        //btnStatusScreen = (ImageButton)findViewById(R.id.btnStatus);
         damageTxt = (TextView)findViewById(R.id.txtDamage);
-        attackspeedTxt = (TextView)findViewById(R.id.txtAttackspeed);
+        //attackspeedTxt = (TextView)findViewById(R.id.txtAttackspeed);
         playerGold = (TextView)findViewById(R.id.txtGold);
         highScoreTxt = (TextView)findViewById(R.id.txtHighScore);
         currentScoreTxt = (TextView)findViewById(R.id.txtScore);
-
-        // Setting the information to the created views.
-        btnStart.setImageResource(R.drawable.btnplay);
-        btnUpgradeScreen.setImageResource(R.drawable.btnarmory);
-        btnStatusScreen.setImageResource(R.drawable.btnstatistics);
 
         // Displaying information.
         damageTxt.setTextSize(16);
         damageTxt.setTextColor(Color.WHITE);
         damageTxt.setText(String.valueOf("DMG: " + playerController.getDamage()));
         damageTxt.setTypeface(null, Typeface.BOLD);
-        attackspeedTxt.setTextSize(16);
-        attackspeedTxt.setTextColor(Color.WHITE);
-        attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
-        attackspeedTxt.setTypeface(null, Typeface.BOLD);
+        //attackspeedTxt.setTextSize(16);
+        //attackspeedTxt.setTextColor(Color.WHITE);
+        //attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
+        //attackspeedTxt.setTypeface(null, Typeface.BOLD);
         playerGold.setTextColor(Color.WHITE);
         playerGold.setTextSize(16);
         playerGold.setText("G: " + playerController.getGold());
@@ -943,12 +1011,14 @@ public class PlayScreen extends AppCompatActivity {
         // Creating a new player.
         createPlayer();
         // Initialize screens.
-        upgradeScreen();
-        statusScreen();
+        //upgradeScreen();
+        //statusScreen();
         // Get enemy sprite direction.
         enemyAnimation(direction);
         // Damage enemy by locating it's direction.
         damageAnimation(direction);
+
+        showBeforePlayScreen();
     }
 
     /*
@@ -979,6 +1049,9 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealthShow2 = 855;
         enemyHealthShow3 = 1705;
         enemyHealthCounter += 1;
+        if(healthBar.getProgress() <= 1){
+            enemyHealthCounter = 1;
+        }
 
         // Creating views.
         enemyHealth = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
@@ -992,6 +1065,9 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealth.setProgress(enemyController.getHealth());
         enemyHealth.getProgressDrawable().setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
         enemyHealthBegin += 1;
+        if(healthBar.getProgress() <= 1){
+            enemyHealthBegin = 1;
+        }
         enemyHealth.setX(x);
         enemyHealth.setY(y + 150);
         enemyHealthTxt.setTextColor(Color.WHITE);
@@ -1240,10 +1316,24 @@ public class PlayScreen extends AppCompatActivity {
                 linearLayout.setBackgroundDrawable(backgroundAnimation);
                 backgroundAnimation.start();
                 break;
+            case 7:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl7);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel7();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
+                break;
+            case 8:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl8);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel8();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
+                break;
             default:
                 // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl6);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel6();
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl8);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel8();
                 linearLayout.setBackgroundDrawable(backgroundAnimation);
                 backgroundAnimation.start();
                 break;

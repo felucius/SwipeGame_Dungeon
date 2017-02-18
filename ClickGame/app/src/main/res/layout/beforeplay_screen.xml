@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@android:color/background_light"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="1dp"
+        android:background="@drawable/backgroundscreen1"
+        android:layout_width="match_parent"
+        android:weightSum="1">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/btnPlay"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/txtHighScore"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"
+            android:layout_weight="0.29" />
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/view14"
+            android:layout_below="@+id/btnUpgrade"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.29"
+            android:layout_height="1dp" />
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/btnUpgrade"
+            android:layout_alignTop="@+id/btnUpgrade"
+            android:layout_alignRight="@+id/txtScore"
+            android:layout_alignEnd="@+id/txtScore"
+            android:background="@android:color/transparent"
+            android:layout_weight="0.29" />
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/view15"
+            android:layout_below="@+id/btnUpgrade"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.29"
+            android:layout_height="1dp" />
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/btnStatus"
+            android:background="@android:color/transparent"
+            android:layout_alignTop="@+id/btnStatus"
+            android:layout_alignLeft="@+id/playerHealth"
+            android:layout_alignStart="@+id/playerHealth"
+            android:layout_weight="0.29" />
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/view16"
+            android:layout_below="@+id/btnUpgrade"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.29"
+            android:layout_height="1dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:layout_weight="0.29">
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>
