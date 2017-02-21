@@ -47,9 +47,11 @@ public class PlayScreen extends AppCompatActivity {
     private int yPos = 0;
     private int x = 0;
     private int y = 0;
+    private int level = 1;
     private int damageX = 0;
     private int damageY = 0;
     private int direction;
+    private int neededScore = 1;
     private int damageMovement1, damageMovement2, damageMovement3 = 0;
     private int enemyNameMovement1, enemyNameMovement2, enemyNameMovement3 = 0;
     private int enemyMovement1, enemyMovement2, enemyMovement3 = 0;
@@ -77,6 +79,7 @@ public class PlayScreen extends AppCompatActivity {
     private boolean IS_KILLABLE = false;
     private boolean IS_DAMAGED = false;
     private boolean IS_SHOOTING = false;
+    private boolean IS_NEXT_LEVEL = false;
 
     private EnemyAnimationController enemyAnimationController = null;
     private CharacterAnimationController characterAnimationController = null;
@@ -94,6 +97,7 @@ public class PlayScreen extends AppCompatActivity {
     private TextView playerName = null;
     private TextView damageTxt = null;
     private TextView attackspeedTxt = null;
+    private TextView nextlevelScore = null;
     private TextView enemyHealthTxt = null;
     private TextView enemyName = null;
     private TextView playerHealthTxt = null;
@@ -101,6 +105,7 @@ public class PlayScreen extends AppCompatActivity {
     private TextView highScoreTxt = null;
     private TextView playerGold = null;
     private ImageButton btnStart = null;
+    private Button btnNextLevel = null;
     private ImageButton btnUpgradeScreen = null;
     private ImageButton btnStatusScreen = null;
     private Button dismisspopup = null;
@@ -308,11 +313,11 @@ public class PlayScreen extends AppCompatActivity {
             //@Override
             //public void onClick(View v) {
                 HIT_PLAYBUTTON = true;
-                if(!IS_ACTIVED_ONETIME){
+                //if(!IS_ACTIVED_ONETIME){
                     startGame();
-                }
-                else if(IS_ACTIVATED){
-                    pauseGame();
+                //}
+                //else if(IS_ACTIVATED){
+                    //pauseGame();
 
                     /*
                     final Dialog pauseDialog = new Dialog(PlayScreen.this);
@@ -342,7 +347,7 @@ public class PlayScreen extends AppCompatActivity {
                         }
                     });
                     */
-                }
+                //}
             //}
         //});
     }
@@ -377,7 +382,7 @@ public class PlayScreen extends AppCompatActivity {
         statusScreen();
 
 
-        if(healthBar.getProgress() <= 1){
+        if(healthBar.getProgress() <= 1 || IS_NEXT_LEVEL == true){
             // Displaying the new information.
             btnStart = (ImageButton)beforePlay.findViewById(R.id.btnPlay);
             btnStart.setOnClickListener(new View.OnClickListener() {
@@ -387,6 +392,11 @@ public class PlayScreen extends AppCompatActivity {
                     beforePlay.dismiss();
                     checkEnemyPosition();
                     createEnemy();
+
+                    if(healthBar.getProgress() <= 1){
+                        level = 1;
+                        getPlayscreenLevel();
+                    }
 
                     playerController.setHealth(playerHealthBegin);
                     playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
@@ -399,6 +409,7 @@ public class PlayScreen extends AppCompatActivity {
                     damageMovement.start();
                     //playGame();
                     startGame();
+                    IS_NEXT_LEVEL = false;
                 }
             });
         }
@@ -703,6 +714,8 @@ public class PlayScreen extends AppCompatActivity {
             highScoreTxt.setText("high score: " + score);
             highScore = score;
         }
+
+        checkLevelRequirement();
     }
 
     /*
@@ -747,7 +760,8 @@ public class PlayScreen extends AppCompatActivity {
 
                 // Highers the current score of the fighting session.
                 currentScore ++;
-
+                //neededScore ++;sdsd
+                nextlevelScore.setText(String.valueOf(currentScore) + " / " + String.valueOf(neededScore));
                 // Remove views that belong to the killed enemy.
                 linearLayout.removeView(enemy);
                 linearLayout.removeView(enemyHealth);
@@ -790,43 +804,8 @@ public class PlayScreen extends AppCompatActivity {
                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + 0));
                 playerHealthTxt.setTextColor(Color.WHITE);
                 healthBar.setProgress(0);
-
-                /*
-                final Dialog gameOverDialog = new Dialog(PlayScreen.this);
-                gameOverDialog.setCanceledOnTouchOutside(false);
-                gameOverDialog.setCancelable(false);
-                gameOverDialog.setContentView(R.layout.gameover_screen);
-                gameOverDialog.show();
-
-                TextView score = (TextView)gameOverDialog.findViewById(R.id.gameOverScore);
-                score.setText("SCORE: " + currentScore);
-
-                */
                 showBeforePlayScreen();
 
-                /*
-                Button restartGame = (Button)gameOverDialog.findViewById(R.id.restartGame);
-                restartGame.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        gameOverDialog.dismiss();
-                        Intent intent = new Intent(v.getContext(), CharacterScreen.class);
-                        startActivity(intent);
-                    }
-                });
-
-                Button pauseExit = (Button)gameOverDialog.findViewById(R.id.exitGame);
-                pauseExit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), StartScreen.class);
-                        // TODO: SAVING THE HIGHSCORE... IF THERE IS ANY
-                        // TODO: ALSO GIVE WARNING MESSAGE IF THEY REALLY WANT TO QUIT.
-                        startActivity(intent);
-                    }
-                });
-
-                */
                 countDownMovement.cancel();
                 damageMovement.cancel();
 
@@ -940,6 +919,7 @@ public class PlayScreen extends AppCompatActivity {
     This method initialize the basic components for the game to work.
      */
     public void initializeGameInformation(){
+        Intent intent = getIntent();
         // Create the game palyground.
         linearLayout = (RelativeLayout)findViewById(R.id.playGround);
         linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
@@ -954,6 +934,7 @@ public class PlayScreen extends AppCompatActivity {
             }
         });
 
+        level = intent.getIntExtra("level", 0);
         getPlayscreenLevel();
 
         /*
@@ -980,18 +961,20 @@ public class PlayScreen extends AppCompatActivity {
         playerGold = (TextView)findViewById(R.id.txtGold);
         highScoreTxt = (TextView)findViewById(R.id.txtHighScore);
         currentScoreTxt = (TextView)findViewById(R.id.txtScore);
+        nextlevelScore = (TextView)findViewById(R.id.txtNextLevelScore);
 
         // Displaying information.
         damageTxt.setTextSize(16);
         damageTxt.setTextColor(Color.WHITE);
         damageTxt.setText(String.valueOf("DMG: " + playerController.getDamage()));
         damageTxt.setTypeface(null, Typeface.BOLD);
-        //attackspeedTxt.setTextSize(16);
-        //attackspeedTxt.setTextColor(Color.WHITE);
-        //attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
-        //attackspeedTxt.setTypeface(null, Typeface.BOLD);
+
+        nextlevelScore.setTextSize(24);
+        nextlevelScore.setTextColor(Color.WHITE);
+        nextlevelScore.setText(String.valueOf(currentScore) + " / " + String.valueOf(neededScore));
+        nextlevelScore.setTypeface(null, Typeface.BOLD);
         playerGold.setTextColor(Color.WHITE);
-        playerGold.setTextSize(16);
+        playerGold.setTextSize(24);
         playerGold.setText("G: " + playerController.getGold());
         playerGold.setTypeface(null, Typeface.BOLD);
         highScoreTxt.setTextSize(24);
@@ -1011,8 +994,6 @@ public class PlayScreen extends AppCompatActivity {
         // Creating a new player.
         createPlayer();
         // Initialize screens.
-        //upgradeScreen();
-        //statusScreen();
         // Get enemy sprite direction.
         enemyAnimation(direction);
         // Damage enemy by locating it's direction.
@@ -1049,9 +1030,9 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealthShow2 = 855;
         enemyHealthShow3 = 1705;
         enemyHealthCounter += 1;
-        if(healthBar.getProgress() <= 1){
-            enemyHealthCounter = 1;
-        }
+        //if(healthBar.getProgress() <= 1){
+        //    enemyHealthCounter = 1;
+        //}
 
         // Creating views.
         enemyHealth = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
@@ -1065,9 +1046,9 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealth.setProgress(enemyController.getHealth());
         enemyHealth.getProgressDrawable().setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
         enemyHealthBegin += 1;
-        if(healthBar.getProgress() <= 1){
-            enemyHealthBegin = 1;
-        }
+        //if(healthBar.getProgress() <= 1){
+        //    enemyHealthBegin = 1;
+        //}
         enemyHealth.setX(x);
         enemyHealth.setY(y + 150);
         enemyHealthTxt.setTextColor(Color.WHITE);
@@ -1273,13 +1254,69 @@ public class PlayScreen extends AppCompatActivity {
         }
     }
 
+    public void checkLevelRequirement(){
+        if(currentScore >= neededScore){
+            neededScore *= 3.4;
+            nextlevelScore.setText(String.valueOf(currentScore) + " / " + String.valueOf(neededScore));
+
+            nextLevel();
+        }
+    }
+
+    public void nextLevel(){
+        countDownMovement.cancel();
+        damageMovement.cancel();
+
+        // Removing information from the enemy that killed the player.
+        linearLayout.removeView(enemy);
+        linearLayout.removeView(enemyHealth);
+        linearLayout.removeView(enemyHealthTxt);
+
+        final Dialog nextLevel = new Dialog(PlayScreen.this);
+        nextLevel.setCanceledOnTouchOutside(false);
+        nextLevel.setCancelable(false);
+        nextLevel.setContentView(R.layout.nextlevel_screen);
+
+        btnNextLevel = (Button) nextLevel.findViewById(R.id.dismissPopup);
+        btnNextLevel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextLevel.dismiss();
+
+                final Dialog mapscreen = new Dialog(PlayScreen.this);
+                mapscreen.setCanceledOnTouchOutside(false);
+                mapscreen.setCancelable(false);
+                mapscreen.setContentView(R.layout.mapoverlay_screen);
+                ImageView showMap  = (ImageView)mapscreen.findViewById(R.id.mapOverlay);
+                showMap.setImageResource(R.drawable.backgroundmap);
+
+                Button btnGetNextLevel = (Button) mapscreen.findViewById(R.id.dismissPopup);
+                btnGetNextLevel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mapscreen.dismiss();
+                        level++;
+                        getPlayscreenLevel();
+                        IS_NEXT_LEVEL = true;
+                        showBeforePlayScreen();
+                    }
+                });
+
+                mapscreen.show();
+            }
+        });
+
+        nextLevel.show();
+    }
+
     public void getPlayscreenLevel(){
         Intent intent = getIntent();
-        int level = intent.getIntExtra("level", 0);
+        //level = intent.getIntExtra("level", 0);
         switch(level){
             case 1:
                 // Setting a background for the playfield.
                 linearLayout.setBackgroundResource(R.drawable.backgroundlvl1);
+                checkLevelRequirement();
                 break;
             case 2:
                 // Setting a background for the playfield.
@@ -1327,6 +1364,13 @@ public class PlayScreen extends AppCompatActivity {
                 // Setting a background for the playfield.
                 linearLayout.setBackgroundResource(R.drawable.backgroundlvl8);
                 backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel8();
+                linearLayout.setBackgroundDrawable(backgroundAnimation);
+                backgroundAnimation.start();
+                break;
+            case 9:
+                // Setting a background for the playfield.
+                linearLayout.setBackgroundResource(R.drawable.backgroundlvl9);
+                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel9();
                 linearLayout.setBackgroundDrawable(backgroundAnimation);
                 backgroundAnimation.start();
                 break;
