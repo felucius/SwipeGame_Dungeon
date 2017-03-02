@@ -7,4 +7,14 @@
     <color name="scv_buttontext">#ffffff</color>
     <color name="scv_textcolor">#ff0015</color>
     <color name="white">#ffffff</color>
+
+
+    <!--TextView colors-->
+    <color name="damagetxt">#f8ff2d</color>
+    <color name="nextlevelscore">#f8ff2d</color>
+    <color name="playergold">#f8ff2d</color>
+    <color name="playerhealthtxt">#f8ff2d</color>
+    <color name="highscoretxt">#f8ff2d</color>
+    <color name="currentscoretxt">#f8ff2d</color>
+    <color name="playername">#f8ff2d</color>
 </resources>

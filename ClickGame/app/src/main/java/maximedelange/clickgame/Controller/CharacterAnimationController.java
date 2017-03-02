@@ -1,6 +1,8 @@
 package maximedelange.clickgame.Controller;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 
 import maximedelange.clickgame.R;
@@ -364,5 +366,60 @@ public class CharacterAnimationController {
         }
 
         return necromancer;
+    }
+
+    /*
+Animation of the character of a certain position
+ */
+    public AnimationDrawable characterAnimation(int enemyDirection, Activity getActivity){
+        AnimationDrawable characterspriteAnim = null;
+
+        Intent intent = getActivity.getIntent();
+        switch(enemyDirection){
+            case 0:
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterspriteAnim = getArcherLeft();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterspriteAnim = getWizardLeft();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterspriteAnim = getAxeThrowerLeft();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterspriteAnim = getNecromancerLeft();
+                }
+                break;
+            case 1:
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterspriteAnim = getArcherRight();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterspriteAnim = getWizardRight();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterspriteAnim = getAxeThrowerRight();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterspriteAnim = getNecromancerRight();
+                }
+                break;
+            case 2:
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterspriteAnim = getArcherDown();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterspriteAnim = getWizardDown();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterspriteAnim = getAxeThrowerDown();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterspriteAnim = getNecromancerDown();
+                }
+                break;
+        }
+
+        return characterspriteAnim;
     }
 }

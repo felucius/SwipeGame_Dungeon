@@ -31,8 +31,9 @@
             android:text="TextView"
             android:layout_height="wrap_content"
             android:id="@+id/txtHighScore"
+            android:textColor="@color/highscoretxt"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/imagePlayer"
+            android:textAppearance="@style/fontsize_24"
             android:layout_width="match_parent"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -40,8 +41,9 @@
         <TextView
             android:text="TextView"
             android:id="@+id/txtScore"
+            android:textColor="@color/currentscoretxt"
             android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
+            android:textAppearance="@style/fontsize_24"
             android:layout_width="match_parent"
             android:layout_below="@+id/txtHighScore" />
 
@@ -50,7 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtGold"
-            android:layout_below="@+id/view"
+            android:textAppearance="@style/fontsize_16"
+            android:textColor="@color/playergold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -59,6 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtDamage"
+            android:textAppearance="@style/fontsize_16"
+            android:textColor="@color/damagetxt"
             android:layout_below="@+id/txtGold"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -77,6 +82,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtHealthShow"
+            android:textAppearance="@style/fontsize_16"
+            android:textColor="@color/playerhealthtxt"
             android:layout_marginBottom="16dp"
             android:layout_above="@+id/playerHealth"
             android:layout_centerHorizontal="true" />
@@ -86,6 +93,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtName"
+            android:textAppearance="@style/fontsize_16"
+            android:textColor="@color/playername"
             android:layout_above="@+id/playerHealth"
             android:layout_alignLeft="@+id/txtHealthShow"
             android:layout_alignStart="@+id/txtHealthShow" />
@@ -103,6 +112,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtScore"
+            android:textAppearance="@style/fontsize_24"
+            android:textColor="@color/nextlevelscore"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:id="@+id/txtNextLevelScore" />

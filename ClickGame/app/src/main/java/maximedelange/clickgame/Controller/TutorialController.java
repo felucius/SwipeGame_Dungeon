@@ -22,7 +22,7 @@ public class TutorialController {
     // Constructor
     public TutorialController(Activity activity){
         this.activity = activity;
-        playerController = new PlayerController("Jack");
+        playerController = new PlayerController();
     }
 
     public void showTutorial(String tutorialID, View player, View enemy, View currentScoreTxt, View btnStart, View btnUpgradeScreen, View btnStatusScreen){

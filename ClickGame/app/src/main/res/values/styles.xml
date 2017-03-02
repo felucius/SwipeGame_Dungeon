@@ -24,5 +24,19 @@
     </style>
 
 
+    <style name="fontsize_10">
+        <item name="android:textSize">10dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="fontsize_16">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="fontsize_24">
+        <item name="android:textSize">24dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>

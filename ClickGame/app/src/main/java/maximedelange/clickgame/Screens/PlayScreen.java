@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,17 +19,19 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import maximedelange.clickgame.Controller.AttackAnimationController;
 import maximedelange.clickgame.Controller.BackgroundAnimationController;
 import maximedelange.clickgame.Controller.CharacterAnimationController;
 import maximedelange.clickgame.Controller.EnemyAnimationController;
 import maximedelange.clickgame.Controller.EnemyController;
 import maximedelange.clickgame.Controller.PlayerController;
+import maximedelange.clickgame.Controller.PlayerStatisticsController;
 import maximedelange.clickgame.Controller.TutorialController;
 import maximedelange.clickgame.Database.Database;
 import maximedelange.clickgame.Domain.DamageCoordinates;
 import maximedelange.clickgame.Domain.EnemyCoordinates;
+import maximedelange.clickgame.Domain.EnemyNames;
 import maximedelange.clickgame.R;
 
 
@@ -45,21 +46,14 @@ public class PlayScreen extends AppCompatActivity {
     private int highScore = 0;
     private int xPos = 0;
     private int yPos = 0;
-    private int x = 0;
-    private int y = 0;
     private int level = 1;
     private int damageX = 0;
     private int damageY = 0;
     private int direction;
-    private int neededScore = 1;
-    private int damageMovement1, damageMovement2, damageMovement3 = 0;
-    private int enemyNameMovement1, enemyNameMovement2, enemyNameMovement3 = 0;
-    private int enemyMovement1, enemyMovement2, enemyMovement3 = 0;
-    private int enemyHealthBar1, enemyHealthBar2, enemyHealthBar3 = 0;
-    private int enemyHealthShow1, enemyHealthShow2, enemyHealthShow3 = 0;
+    private int neededScore = 5;
+    private int coords[] = new int[3];
     private int enemyHealthCounter = 0;
     private int playerHealthBegin = 0;
-    private int playerDamageBegin = 1;
     private int enemyHealthBegin = 0;
     private boolean IS_COLLIDING = false;
     private CountDownTimer countDownMovement = null;
@@ -73,9 +67,6 @@ public class PlayScreen extends AppCompatActivity {
     private AnimationDrawable enemySpriteAnimation = null;
     private AnimationDrawable backgroundAnimation = null;
     private AnimationDrawable characterDamageAnimation = null;
-    private boolean IS_ACTIVATED = false;
-    private boolean IS_ACTIVED_ONETIME = false;
-    private boolean HIT_PLAYBUTTON = false;
     private boolean IS_KILLABLE = false;
     private boolean IS_DAMAGED = false;
     private boolean IS_SHOOTING = false;
@@ -96,7 +87,6 @@ public class PlayScreen extends AppCompatActivity {
     private ProgressBar enemyHealth = null;
     private TextView playerName = null;
     private TextView damageTxt = null;
-    private TextView attackspeedTxt = null;
     private TextView nextlevelScore = null;
     private TextView enemyHealthTxt = null;
     private TextView enemyName = null;
@@ -122,15 +112,9 @@ public class PlayScreen extends AppCompatActivity {
         attackAnimationController = new AttackAnimationController(this);
         backgroundAnimationController = new BackgroundAnimationController(this);
         tutorialController = new TutorialController(this);
-
-        // Create database.
-        database = new Database(this, null, null, 1);
-        // Initialize basic gameplay information.
-        initializeGameInformation();
-        // Creating an enemy
-        createEnemy();
-        // Starts the game
-        //playGame();
+        database = new Database(this, null, null, 1); // Create database.
+        initializeGameInformation(); // Initialize basic gameplay information.
+        createEnemy(); // Creating an enemy
         // Shows tutorial for new players
         //tutorialController.showTutorial("1", player, enemy, currentScoreTxt, btnStart, btnUpgradeScreen, btnStatusScreen);
     }
@@ -138,243 +122,51 @@ public class PlayScreen extends AppCompatActivity {
     /*
     This method animates the enemy. It gets an "direction" as parameter
     to know in which way the enemy needs to animate.
-     */
-    public void enemyAnimation(int direction){
-        switch(direction){
-            case 0:
-                enemySpriteAnimation = enemyAnimationController.getEnemyLevel1Left();
-                break;
-            case 1:
-                enemySpriteAnimation = enemyAnimationController.getEnemyLevel1Right();
-                break;
-            case 2:
-                enemySpriteAnimation = enemyAnimationController.getEnemyLevel1Up();
-                break;
-        }
+    */
+    public void enemyAnimation(int direction) {
+        enemySpriteAnimation = enemyAnimationController.enemyAnimation(direction);
     }
 
     /*
     This method animates the character. It gets an "enemyDirection" as parameter
     to know in which way the character needs to be looking/animate.
      */
-    public void characterAnimation(int enemyDirection){
-        Intent intent = getIntent();
-        switch(enemyDirection){
-            case 0:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    characterspriteAnim = characterAnimationController.getArcherLeft();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterspriteAnim = characterAnimationController.getWizardLeft();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    characterspriteAnim = characterAnimationController.getAxeThrowerLeft();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    characterspriteAnim = characterAnimationController.getNecromancerLeft();
-                }
-                break;
-            case 1:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    characterspriteAnim = characterAnimationController.getArcherRight();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterspriteAnim = characterAnimationController.getWizardRight();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    characterspriteAnim = characterAnimationController.getAxeThrowerRight();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    characterspriteAnim = characterAnimationController.getNecromancerRight();
-                }
-                break;
-            case 2:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    characterspriteAnim = characterAnimationController.getArcherDown();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterspriteAnim = characterAnimationController.getWizardDown();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    characterspriteAnim = characterAnimationController.getAxeThrowerDown();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    characterspriteAnim = characterAnimationController.getNecromancerDown();
-                }
-                break;
-        }
+    public void characterAnimation(int enemyDirection) {
+        characterspriteAnim = characterAnimationController.characterAnimation(enemyDirection, this);
     }
 
-    public void damageAnimation(int enemyDirection){
-        Intent intent = getIntent();
-        switch(enemyDirection){
-            case 0:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    characterDamageAnimation = attackAnimationController.getArrowLeft();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterDamageAnimation = attackAnimationController.getSpellLeft();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    characterDamageAnimation = attackAnimationController.getAxeLeft();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    characterDamageAnimation = attackAnimationController.getNecroSpellLeft();
-                }
-                break;
-            case 1:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    characterDamageAnimation = attackAnimationController.getArrowRight();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterDamageAnimation = attackAnimationController.getSpellRight();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    characterDamageAnimation = attackAnimationController.getAxeRight();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    characterDamageAnimation = attackAnimationController.getNecroSpellRight();
-                }
-                break;
-            case 2:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    characterDamageAnimation = attackAnimationController.getArrowDown();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    characterDamageAnimation = attackAnimationController.getSpellDown();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    characterDamageAnimation = attackAnimationController.getAxeDown();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    characterDamageAnimation = attackAnimationController.getNecroSpellDown();
-                }
-                break;
-        }
+    public void damageAnimation(int enemyDirection) {
+        characterDamageAnimation = attackAnimationController.damageAnimation(enemyDirection, this);
     }
 
-    /*
-    This method starts the game.
-    It checks if the game has already been started.
-    If the game has been started, the game can be paused again
-    and the enemies are not killable when paused
-     */
-    public void startGame(){
-        // Active only once
-        if(HIT_PLAYBUTTON){
-            btnStart.setImageResource(R.drawable.btnplay);
-            // Activate gameplay after the first time start has been pressed
-            if(!IS_ACTIVED_ONETIME){
-                btnStart.setImageResource(R.drawable.btnplay);
-                damageEnemy();
-                setEnemyMovement();
-                setDamageMovement();
-                IS_ACTIVATED = true;
-                IS_KILLABLE = true;
-                IS_ACTIVED_ONETIME = true;
-            }
-            /*
-            Activate gameplay if the "Continue" button on the dialog
-            has been pressed
-             */
-            else if(!IS_ACTIVATED){
-                btnStart.setImageResource(R.drawable.btnplay);
-                damageEnemy();
-                setEnemyMovement();
-                setDamageMovement();
-                IS_ACTIVATED = true;
-                IS_KILLABLE = true;
-            }
-        }
+    public void startGame() {
+        damageEnemy();
+        setEnemyMovement();
+        setDamageMovement();
+        IS_KILLABLE = true;
     }
 
-    /*
-    This method will pause the game.
-    The timer for the enemy movement will be stopped.
-     */
-    public void pauseGame(){
-        if(IS_ACTIVATED) {
-            btnStart.setImageResource(R.drawable.btnpause);
-            countDownMovement.cancel();
-            damageMovement.cancel();
-            Toast.makeText(PlayScreen.this, "paused", Toast.LENGTH_SHORT).show();
-            IS_ACTIVATED = false;
-        }
-    }
-
-    /*
-    This method starts the game.
-    If the game is already active, the game will be paused.
-    And a dialog will be displayed. This dialog contains text message
-    to either "Quit" or "Continue" the gameplay.
-     */
-    public void playGame(){
-        //btnStart.setOnClickListener(new View.OnClickListener() {
-            //@Override
-            //public void onClick(View v) {
-                HIT_PLAYBUTTON = true;
-                //if(!IS_ACTIVED_ONETIME){
-                    startGame();
-                //}
-                //else if(IS_ACTIVATED){
-                    //pauseGame();
-
-                    /*
-                    final Dialog pauseDialog = new Dialog(PlayScreen.this);
-                    pauseDialog.setCanceledOnTouchOutside(false);
-                    pauseDialog.setCancelable(false);
-                    pauseDialog.setContentView(R.layout.pause_screen);
-                    pauseDialog.show();
-
-                    Button pauseContinue = (Button)pauseDialog.findViewById(R.id.continueGame);
-                    pauseContinue.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            pauseDialog.dismiss();
-                            startGame();
-                        }
-                    });
-
-
-                    Button pauseExit = (Button)pauseDialog.findViewById(R.id.exitGame);
-                    pauseExit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), StartScreen.class);
-                            // TODO: SAVING THE HIGHSCORE... IF THERE IS ANY
-                            // TODO: ALSO GIVE WARNING MESSAGE IF THEY REALLY WANT TO QUIT.
-                            startActivity(intent);
-                        }
-                    });
-                    */
-                //}
-            //}
-        //});
-    }
-
-    public void showBeforePlayScreen(){
-        final Dialog beforePlay = new Dialog(PlayScreen.this);
-        beforePlay.setCanceledOnTouchOutside(false);
-        beforePlay.setCancelable(false);
-        beforePlay.setContentView(R.layout.beforeplay_screen);
+    public void showBeforePlayScreen() {
+        final Dialog dialogscreen = new Dialog(PlayScreen.this);
+        dialogscreen.setCanceledOnTouchOutside(false);
+        dialogscreen.setCancelable(false);
+        dialogscreen.setContentView(R.layout.beforeplay_screen);
 
         // Setting the information to the created views.
-        btnStart = (ImageButton)beforePlay.findViewById(R.id.btnPlay);
-        btnStatusScreen = (ImageButton)beforePlay.findViewById(R.id.btnStatus);
-        btnUpgradeScreen = (ImageButton)beforePlay.findViewById(R.id.btnUpgrade);
+        btnStart = (ImageButton) dialogscreen.findViewById(R.id.btnPlay);
+        btnStatusScreen = (ImageButton) dialogscreen.findViewById(R.id.btnStatus);
+        btnUpgradeScreen = (ImageButton) dialogscreen.findViewById(R.id.btnUpgrade);
 
         btnStart.setImageResource(R.drawable.btnplay);
         btnUpgradeScreen.setImageResource(R.drawable.btnarmory);
         btnStatusScreen.setImageResource(R.drawable.btnstatistics);
 
-        btnStart = (ImageButton)beforePlay.findViewById(R.id.btnPlay);
+        btnStart = (ImageButton) dialogscreen.findViewById(R.id.btnPlay);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //System.out.println("REACHED CLICK EVENT BEFOREPLAY");
-                beforePlay.dismiss();
-                playGame();
-                //startGame();
+                dialogscreen.dismiss();
+                startGame();
             }
         });
 
@@ -382,67 +174,58 @@ public class PlayScreen extends AppCompatActivity {
         statusScreen();
 
 
-        if(healthBar.getProgress() <= 1 || IS_NEXT_LEVEL == true){
+        if (healthBar.getProgress() <= 1 || IS_NEXT_LEVEL == true) {
             // Displaying the new information.
-            btnStart = (ImageButton)beforePlay.findViewById(R.id.btnPlay);
+            btnStart = (ImageButton) dialogscreen.findViewById(R.id.btnPlay);
             btnStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //System.out.println("REACHED CLICK EVENT BEFOREPLAY");
-                    beforePlay.dismiss();
+                    dialogscreen.dismiss();
                     checkEnemyPosition();
                     createEnemy();
 
-                    if(healthBar.getProgress() <= 1){
+                    if (healthBar.getProgress() <= 1) {
                         level = 1;
                         getPlayscreenLevel();
                     }
 
                     playerController.setHealth(playerHealthBegin);
                     playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
-                    playerHealthTxt.setTextColor(Color.WHITE);
                     healthBar.setProgress(playerController.getHealth());
 
-                    // TODO: ENEMY MOVEMENT DOES NOT CORRECT ITSELF WHEN CREATING A NEW ONE
-
-                    countDownMovement.start();
-                    damageMovement.start();
-                    //playGame();
                     startGame();
                     IS_NEXT_LEVEL = false;
                 }
             });
         }
 
-        beforePlay.show();
+        dialogscreen.show();
     }
 
     /*
     This method shows the upgrade screen for the players. In this screen the hero
     can be upgraded with different kinds of upgrades.
      */
-    public void upgradeScreen(){
+    public void upgradeScreen() {
         btnUpgradeScreen.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                //pauseGame();
-
                 final Dialog upgradeDialog = new Dialog(PlayScreen.this);
                 upgradeDialog.setCanceledOnTouchOutside(false);
                 upgradeDialog.setCancelable(false);
                 upgradeDialog.setContentView(R.layout.upgrade_screen);
 
                 // Creating views
-                final TextView upgradeHealth = (TextView)upgradeDialog.findViewById(R.id.upgradeHealthTxt);
-                final TextView upgradeHealthCost = (TextView)upgradeDialog.findViewById(R.id.upgradeHealthCostTxt);
-                final TextView upgradeDamage = (TextView)upgradeDialog.findViewById(R.id.upgradeDamageTxt);
-                final TextView upgradeDamageCost = (TextView)upgradeDialog.findViewById(R.id.upgradeDamageCostTxt);
-                final TextView upgradeAttackspeed = (TextView)upgradeDialog.findViewById(R.id.upgradeAttackspeedTxt);
-                final TextView upgradeAttackspeedCost = (TextView)upgradeDialog.findViewById(R.id.upgradeAttackspeedCostTxt);
-                final Button btnUpgradeHealth = (Button)upgradeDialog.findViewById(R.id.btnUpgradeHealth);
-                final Button btnUpgradeDamage = (Button)upgradeDialog.findViewById(R.id.btnUpgradeDamage);
-                final Button btnUpgradeAttackspeed = (Button)upgradeDialog.findViewById(R.id.btnUpgradeAttackspeed);
+                final TextView upgradeHealth = (TextView) upgradeDialog.findViewById(R.id.upgradeHealthTxt);
+                final TextView upgradeHealthCost = (TextView) upgradeDialog.findViewById(R.id.upgradeHealthCostTxt);
+                final TextView upgradeDamage = (TextView) upgradeDialog.findViewById(R.id.upgradeDamageTxt);
+                final TextView upgradeDamageCost = (TextView) upgradeDialog.findViewById(R.id.upgradeDamageCostTxt);
+                final TextView upgradeAttackspeed = (TextView) upgradeDialog.findViewById(R.id.upgradeAttackspeedTxt);
+                final TextView upgradeAttackspeedCost = (TextView) upgradeDialog.findViewById(R.id.upgradeAttackspeedCostTxt);
+                final Button btnUpgradeHealth = (Button) upgradeDialog.findViewById(R.id.btnUpgradeHealth);
+                final Button btnUpgradeDamage = (Button) upgradeDialog.findViewById(R.id.btnUpgradeDamage);
+                final Button btnUpgradeAttackspeed = (Button) upgradeDialog.findViewById(R.id.btnUpgradeAttackspeed);
 
                 // Setting content to the views
                 upgradeHealth.setText(String.valueOf(playerController.getHealth()));
@@ -452,47 +235,18 @@ public class PlayScreen extends AppCompatActivity {
                 upgradeDamageCost.setText(String.valueOf("G " + upgradecostDamage));
                 upgradeAttackspeedCost.setText(String.valueOf("G " + upgradecostAttackspeed));
 
-                // Health
-                btnUpgradeHealth.setText("upgrade");
-                btnUpgradeHealth.setTextSize(10);
-                btnUpgradeHealth.setTypeface(null, Typeface.BOLD);
+                btnUpgradeHealth.setText("upgrade"); // Health
+                btnUpgradeDamage.setText("upgrade"); // Damage
+                btnUpgradeAttackspeed.setText("upgrade"); // Attack speed
 
-                // Damage
-                btnUpgradeDamage.setText("upgrade");
-                btnUpgradeDamage.setTextSize(10);
-                btnUpgradeDamage.setTypeface(null, Typeface.BOLD);
-
-                // Attack speed
-                btnUpgradeAttackspeed.setText("upgrade");
-                btnUpgradeAttackspeed.setTextSize(10);
-                btnUpgradeAttackspeed.setTypeface(null, Typeface.BOLD);
-
-                if(playerController.getGold() >= upgradecostHealth) {
+                if (playerController.getGold() >= upgradecostHealth) {
                     btnUpgradeHealth.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(View v) {
                             upgradeDialog.create();
                             if (playerController.getGold() >= upgradecostHealth) {
-                                playerController.setBuyUpgrade(upgradecostHealth);
-                                // Adding 1 to the amount of upgrades.
-                                playerController.setAmountOfHealthUpgrades(1);
-
-                                /*
-                                 Checking for the amount of upgrades. For each upgrade the price
-                                 is getting up by percentage
-                                 */
-                                for (int i = 0; i < playerController.getAmountOfHealthUpgrades(); i++) {
-                                    upgradecostHealth *= 1.5;
-                                }
-
-                                // Adding the new information.
-                                playerController.setUpgradeHealth(3);
-
-                                // Retrieve the new information.
-                                playerHealthBegin = playerController.getHealth();
-
-                                // Displaying the new information.
+                                upgradecostHealth = playerController.healthUpgradeLogic(upgradecostHealth);
                                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
                                 healthBar.setMax(playerController.getHealth());
                                 healthBar.setProgress(playerController.getHealth());
@@ -503,40 +257,23 @@ public class PlayScreen extends AppCompatActivity {
                                 if (playerController.getGold() <= upgradecostHealth) {
                                     btnUpgradeHealth.setEnabled(false);
                                 }
-                            }
-                            else{
+                            } else {
                                 btnUpgradeHealth.setEnabled(false);
                             }
                         }
                     });
-                }
-                else{
+                } else {
                     btnUpgradeHealth.setEnabled(false);
                 }
 
-                if(playerController.getGold() >= upgradecostDamage) {
+                if (playerController.getGold() >= upgradecostDamage) {
                     btnUpgradeDamage.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(View v) {
                             upgradeDialog.create();
                             if (playerController.getGold() >= upgradecostDamage) {
-                                playerController.setBuyUpgrade(upgradecostDamage);
-                                // Adding 1 to the amount of upgrades
-                                playerController.setAmountOfDamageUpgrades(1);
-
-                                /*
-                                 Checking for the amount of upgrades. For each upgrade the price
-                                 is getting up by a percentage.
-                                */
-                                for (int i = 0; i < playerController.getAmountOfDamageUpgrades(); i++) {
-                                    upgradecostDamage *= 1.5;
-                                }
-
-                                // Adding the new information
-                                playerController.setUpgradeDamage(1);
-
-                                // Displaying the new information.
+                                upgradecostDamage = playerController.damageUpgradeLogic(upgradecostDamage);
                                 damageTxt.setText(String.valueOf("DMG: " + playerController.getDamage()));
                                 upgradeDamage.setText(String.valueOf(playerController.getDamage()));
                                 upgradeDamageCost.setText(String.valueOf("G " + upgradecostDamage));
@@ -550,35 +287,18 @@ public class PlayScreen extends AppCompatActivity {
                             }
                         }
                     });
-                }
-                else{
+                } else {
                     btnUpgradeDamage.setEnabled(false);
                 }
 
-                if(playerController.getGold() >= upgradecostAttackspeed) {
+                if (playerController.getGold() >= upgradecostAttackspeed) {
                     btnUpgradeAttackspeed.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(View v) {
                             upgradeDialog.create();
                             if (playerController.getGold() >= upgradecostAttackspeed) {
-                                playerController.setBuyUpgrade(upgradecostAttackspeed);
-                                // Adding 1 to the amount of upgrades
-                                playerController.setAmountOfAttackspeedUpgrades(1);
-
-                                /*
-                                 Checking for the amount of upgrades. For each upgrade the price
-                                 is getting up by a percentage.
-                                */
-                                for (int i = 0; i < playerController.getAmountOfAttackspeedUpgrades(); i++) {
-                                    upgradecostAttackspeed *= 1.5;
-                                }
-
-                                // Adding the new information
-                                playerController.setUpgradeAttackspeed(5);
-
-                                // Displaying the new information.
-                                //attackspeedTxt.setText(String.valueOf("SPEED: " + playerController.getAttackspeed()));
+                                upgradecostAttackspeed = playerController.attackspeedUpgradeLogic(upgradecostAttackspeed);
                                 upgradeAttackspeed.setText(String.valueOf(playerController.getAttackspeed()));
                                 upgradeAttackspeedCost.setText(String.valueOf("G " + upgradecostAttackspeed));
                                 playerGold.setText(String.valueOf(playerController.getGold()));
@@ -591,64 +311,34 @@ public class PlayScreen extends AppCompatActivity {
                             }
                         }
                     });
-                }
-                else{
+                } else {
                     btnUpgradeAttackspeed.setEnabled(false);
                 }
 
-                dismisspopup = (Button)upgradeDialog.findViewById(R.id.dismissPopup);
+                dismisspopup = (Button) upgradeDialog.findViewById(R.id.dismissPopup);
                 dismisspopup.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         upgradeDialog.dismiss();
-                        //startGame();
                     }
                 });
-
                 upgradeDialog.show();
             }
         });
     }
 
-    public void statusScreen(){
+    public void statusScreen() {
+        final PlayerStatisticsController playerStatisticsController = new PlayerStatisticsController();
         btnStatusScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //pauseGame();
-
-                final Dialog statusScreenDialog = new Dialog(PlayScreen.this);
-                statusScreenDialog.setCanceledOnTouchOutside(false);
-                statusScreenDialog.setCancelable(false);
-                statusScreenDialog.setContentView(R.layout.status_screen);
-
-                // Create textviews
-                TextView statusHealth = (TextView)statusScreenDialog.findViewById(R.id.playerStatusHealthTxt);
-                TextView statusTapDamage = (TextView)statusScreenDialog.findViewById(R.id.playerStatusTapDamageTxt);
-                TextView statusHighScore = (TextView)statusScreenDialog.findViewById(R.id.playerStatusHighScoreTxt);
-                TextView statusCurrentScore = (TextView)statusScreenDialog.findViewById(R.id.playerStatusCurrentScoreTxt);
-                TextView statusGold = (TextView)statusScreenDialog.findViewById(R.id.playerStatusGoldTxt);
-                TextView statusHealthUpgrades = (TextView)statusScreenDialog.findViewById(R.id.playerStatusAmountOfHealthUpgradesTxt);
-                TextView statusDamageUpgrades = (TextView)statusScreenDialog.findViewById(R.id.playerStatusAmountOfDamageUpgradesTxt);
-                TextView statusAttackspeedUpgrades = (TextView)statusScreenDialog.findViewById(R.id.playerStatusAmountOfAttackspeedTxt);
-
-                // Displaying the character information
-                statusHealth.setText("HEALTH: " + playerController.getHealth());
-                statusTapDamage.setText("DAMAGE: " + playerController.getDamage());
-                statusHighScore.setText("HIGH SCORE: " + database.getHighscore());
-                statusCurrentScore.setText("SCORE: " + playerController.getScore());
-                statusGold.setText("GOLD: " + playerController.getGold());
-                statusHealthUpgrades.setText("TOTAL HEALTH UPGRADES: " + playerController.getAmountOfHealthUpgrades());
-                statusDamageUpgrades.setText("TOTAL DAMAGE UPGRADES: " + playerController.getAmountOfDamageUpgrades());
-                statusAttackspeedUpgrades.setText("TOTAL ATTACK SPEED UPGRADES: " + playerController.getAmountOfAttackspeedUpgrades());
-
+                final Dialog statusScreenDialog = playerStatisticsController.statusScreen(PlayScreen.this, playerController, database);
                 statusScreenDialog.show();
-
-                dismisspopup = (Button)statusScreenDialog.findViewById(R.id.dismissPopup);
+                dismisspopup = (Button) statusScreenDialog.findViewById(R.id.dismissPopup);
                 dismisspopup.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         statusScreenDialog.dismiss();
-                        //startGame();
                     }
                 });
             }
@@ -658,70 +348,43 @@ public class PlayScreen extends AppCompatActivity {
     /*
     Create a player with some specifications.
      */
-    public void createPlayer(){
-        Intent intent = getIntent();
+    public void createPlayer() {
+        // Create views.
+        playerHealthTxt = (TextView) findViewById(R.id.txtHealthShow);
+        player = (ImageView) findViewById(R.id.imagePlayer);
+        healthBar = (ProgressBar) findViewById(R.id.playerHealth);
+        playerName = (TextView) findViewById(R.id.txtName);
 
-        damageMovement1 = 465;
-        damageMovement2 = 495;
-        damageMovement3 = 900;
-
-        // Getting player information.
+        // Creating player
+        playerController.createPlayer("Jack", player, PlayScreen.this);
         playerHealthBegin = playerController.getHealth();
 
-        // Create views.
-        playerHealthTxt = (TextView)findViewById(R.id.txtHealthShow);
-        player = (ImageView)findViewById(R.id.imagePlayer);
-        healthBar = (ProgressBar)findViewById(R.id.playerHealth);
-        playerName = (TextView)findViewById(R.id.txtName);
-
         // Displaying the character information.
-        playerHealthTxt.setTextColor(Color.WHITE);
         playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
         healthBar.getProgressDrawable().setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
         healthBar.setMax(playerController.getHealth());
         healthBar.setProgress(playerController.getHealth());
-        playerName.setTextSize(16);
-        playerName.setTextColor(Color.WHITE);
-        playerName.setTypeface(null, Typeface.BOLD);
         playerName.setText(playerController.getName());
         playerName.setY(100);
-
-        player.setY(80);
-
-        if(intent.getIntExtra("archer", 0) == 1){
-            player.setImageResource(R.drawable.characterarcher1l1);
-        }
-        else if(intent.getIntExtra("wizard", 0) == 2){
-            player.setImageResource(R.drawable.characterwizard1down1left);
-        }
-        else if(intent.getIntExtra("axethrower", 0) == 3){
-            player.setImageResource(R.drawable.characteraxethrowerlvl1left1);
-        }
-        else if(intent.getIntExtra("necromancer", 0) == 4){
-            player.setImageResource(R.drawable.characternecromancerlvl1left1);
-        }
     }
 
     /*
     Updating the current and highscore.
      */
-    public void changeScoreBar(int score){
+    public void changeScoreBar(int score) {
         currentScoreTxt.setText("score: " + score);
-        currentScoreTxt.setTextColor(Color.WHITE);
         highScoreTxt.setText("high score: " + highScore);
-        highScoreTxt.setTextColor(Color.WHITE);
-        if(score > highScore){
+        if (score > highScore) {
             highScoreTxt.setText("high score: " + score);
             highScore = score;
         }
-
         checkLevelRequirement();
     }
 
     /*
     Checks for damage with enemy collision.
     */
-    public void damageCollisionDetection(){
+    public void damageCollisionDetection() {
         Rect damageCollision = new Rect();
         Rect enemyCollision = new Rect();
 
@@ -729,67 +392,60 @@ public class PlayScreen extends AppCompatActivity {
         enemy.getHitRect(enemyCollision);
 
         // Collision detection between damage and enemy.
-        if(Rect.intersects(damageCollision, enemyCollision)){
+        if (Rect.intersects(damageCollision, enemyCollision)) {
             IS_SHOOTING = false;
             enemy.setClickable(true);
-            // Deals damage to the health of the enemy.
-            enemyHealthCounter -= playerController.getDamage();
+            enemyHealthCounter -= playerController.getDamage(); // Deals damage to the health of the enemy.
 
             // Setting the new information
             enemyController.setHealth(enemyHealthCounter);
             enemyHealth.setProgress(enemyHealthCounter);
 
-            // Is not colliding anymore and enemy also cannot be killed.
-            IS_COLLIDING = true;
-            IS_DAMAGED = false;
+            IS_COLLIDING = true; // Is not colliding anymore
+            IS_DAMAGED = false; // Enemy cannot be killed.
 
             // Display healthbar of enemy.
-            if(enemyHealthBegin >= 10){
+            if (enemyHealthBegin >= 10) {
                 enemyHealthTxt.setText(String.valueOf(enemyHealthBegin + " / " + enemyController.getHealth()));
-            }else{
+            } else {
                 enemyHealthTxt.setText(String.valueOf("  " + enemyHealthBegin + " / " + enemyController.getHealth()));
             }
 
             // If enemy has been killed. Views are destroyed, update score and recreate an new enemy.
-            if(enemyHealthCounter < 1){
-                // Retrieve gold from killed enemy.
-                int gold = enemyController.getGold();
+            if (enemyHealthCounter < 1) {
+                int gold = enemyController.getGold(); // Retrieve gold from killed enemy.
                 playerController.setGold(gold);
-                playerGold.setTextColor(Color.WHITE);
                 playerGold.setText("gold: " + playerController.getGold());
 
-                // Highers the current score of the fighting session.
-                currentScore ++;
-                //neededScore ++;sdsd
+                currentScore++; // Highers the current score of the fighting session.
                 nextlevelScore.setText(String.valueOf(currentScore) + " / " + String.valueOf(neededScore));
+
                 // Remove views that belong to the killed enemy.
                 linearLayout.removeView(enemy);
                 linearLayout.removeView(enemyHealth);
                 linearLayout.removeView(enemyHealthTxt);
+                linearLayout.removeView(enemyName);
 
                 // Creating a new enemy for battle.
                 enemyHealthCounter = enemyHealthBegin;
                 createEnemy();
                 changeScoreBar(currentScore);
 
-                if(currentScore >= highScore){
+                if (currentScore >= highScore) {
                     playerController.setHighScore(currentScore);
                     database.updateHighscore(playerController.getHighScore());
-                }else{
+                } else {
                     playerController.setScore(currentScore);
                 }
             }
-
             linearLayout.removeView(damage);
-
         }
     }
-
 
     /*
     Checks for enemy with player collision.
      */
-    public void collisionDetection(){
+    public void collisionDetection() {
         Rect playerCollision = new Rect();
         Rect enemyCollision = new Rect();
 
@@ -797,15 +453,13 @@ public class PlayScreen extends AppCompatActivity {
         enemy.getHitRect(enemyCollision);
 
         // Collision detection between player and enemy.
-        if(Rect.intersects(playerCollision, enemyCollision)){
+        if (Rect.intersects(playerCollision, enemyCollision)) {
             // Player has been killed. Specs are being set for the death of the player.
-            if(healthBar.getProgress() <= 1){
+            if (healthBar.getProgress() <= 1) {
                 // Displaying the new information.
                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + 0));
-                playerHealthTxt.setTextColor(Color.WHITE);
                 healthBar.setProgress(0);
                 showBeforePlayScreen();
-
                 countDownMovement.cancel();
                 damageMovement.cancel();
 
@@ -813,64 +467,32 @@ public class PlayScreen extends AppCompatActivity {
                 linearLayout.removeView(enemy);
                 linearLayout.removeView(enemyHealth);
                 linearLayout.removeView(enemyHealthTxt);
-            }else{
+            } else {
                 IS_COLLIDING = true;
                 // Setting new player health after attack.
                 playerController.setHealth(playerController.enemyDoDamage(1));
                 healthBar.setProgress(playerController.getHealth());
                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
-
-                // When the enemy hit the player the enemy is spawned to it's begin point.
-                checkEnemyPosition();
+                checkEnemyPosition(); // When the enemy hit the player the enemy is spawned to it's begin point.
             }
         }
     }
 
-    public void checkEnemyPosition(){
-        // When the enemy hit the player the enemy is spawned to it's begin point.
-        switch (direction){
-            case 0:
-                enemyMovement1 = 0;
-                enemyHealthBar1 = 0;
-                enemyHealthShow1 = 0;
-                enemy.setX(enemyMovement1);
-                enemyHealth.setX(enemyHealthBar1);
-                enemyHealthTxt.setX(enemyHealthShow1);
-                break;
-            case 1:
-                enemyMovement2 = 855;
-                enemyHealthBar2 = 855;
-                enemyHealthShow2 = 855;
-                enemy.setX(enemyMovement2);
-                enemyHealth.setX(enemyHealthBar2);
-                enemyHealthTxt.setX(enemyHealthShow2);
-                break;
-            case 2:
-                enemyMovement3 = 1340;
-                enemyHealthBar3 = 1590;
-                enemyHealthShow3 = 1610;
-                enemy.setY(enemyMovement3);
-                enemyHealth.setY(enemyHealthBar3);
-                enemyHealthTxt.setY(enemyHealthShow3);
-                break;
-        }
+    public void checkEnemyPosition() {
+        enemyController.checkEnemyPosition(direction, enemy, enemyHealth, enemyHealthTxt, enemyName);
     }
 
     /*
     Moves the damage on the playground
     */
-    public void setDamageMovement(){
+    public void setDamageMovement() {
         damageMovement = new CountDownTimer(10000000 * 1000, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if(IS_COLLIDING){
+                if (IS_COLLIDING) {
                     IS_COLLIDING = false;
-                }else{
-                    /*
-                    If the player deals damage the direction of the enemy is getting retrieved.
-                    In this case the damage knows in what direction it needs to go.
-                     */
-                    if(IS_DAMAGED){
+                } else {
+                    if (IS_DAMAGED) {
                         getDamageDirection(direction);
                     }
                     damageCollisionDetection();
@@ -883,25 +505,22 @@ public class PlayScreen extends AppCompatActivity {
                 // Nothing to do here
             }
         };
-
         damageMovement.start();
     }
 
     /*
     Moves the enemy on the playground
      */
-    public void setEnemyMovement(){
-        player = (ImageView)findViewById(R.id.imagePlayer);
+    public void setEnemyMovement() {
+        player = (ImageView) findViewById(R.id.imagePlayer);
         countDownMovement = new CountDownTimer(10000000 * 1000, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if(IS_COLLIDING){
+                if (IS_COLLIDING) {
                     IS_COLLIDING = false;
-                }else{
-                    // Getting the direction the enemy needs to walk in.
-                    getEnemyDirection(direction);
-                    // Checking for the collision between player and enemy
-                    collisionDetection();
+                } else {
+                    getEnemyDirection(direction);// Getting enemy's walking direction
+                    collisionDetection(); // Checking player and enemy collision
                     IS_COLLIDING = false;
                 }
             }
@@ -918,15 +537,13 @@ public class PlayScreen extends AppCompatActivity {
     /*
     This method initialize the basic components for the game to work.
      */
-    public void initializeGameInformation(){
+    public void initializeGameInformation() {
         Intent intent = getIntent();
         // Create the game palyground.
-        linearLayout = (RelativeLayout)findViewById(R.id.playGround);
-        linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
-        {
+        linearLayout = (RelativeLayout) findViewById(R.id.playGround);
+        linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onGlobalLayout()
-            {
+            public void onGlobalLayout() {
                 // gets called after layout has been done but before display.
                 linearLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 xPos = linearLayout.getWidth();
@@ -937,50 +554,26 @@ public class PlayScreen extends AppCompatActivity {
         level = intent.getIntExtra("level", 0);
         getPlayscreenLevel();
 
-        /*
-        // Setting a background for the playfield.
-        linearLayout.setBackgroundResource(R.drawable.backgroundlvl1);
-        backgroundAnimation = backgroundAnimationController.getBackground();
-        linearLayout.setBackgroundDrawable(backgroundAnimation);
-        backgroundAnimation.start();
-        */
-
         // Initialize controller classes.
         enemyCoordinates = new EnemyCoordinates();
         damageCoordinates = new DamageCoordinates();
-        playerController = new PlayerController("Jack");
+        playerController = new PlayerController();
         enemyController = new EnemyController();
+
+        createPlayer(); // Creating a new player.
 
         // Create views.
         damage = new ImageView(this);
-        //btnStart = (ImageButton)findViewById(R.id.btnPlay);
-        //btnUpgradeScreen = (ImageButton)findViewById(R.id.btnUpgrade);
-        //btnStatusScreen = (ImageButton)findViewById(R.id.btnStatus);
-        damageTxt = (TextView)findViewById(R.id.txtDamage);
-        //attackspeedTxt = (TextView)findViewById(R.id.txtAttackspeed);
-        playerGold = (TextView)findViewById(R.id.txtGold);
-        highScoreTxt = (TextView)findViewById(R.id.txtHighScore);
-        currentScoreTxt = (TextView)findViewById(R.id.txtScore);
-        nextlevelScore = (TextView)findViewById(R.id.txtNextLevelScore);
+        damageTxt = (TextView) findViewById(R.id.txtDamage);
+        playerGold = (TextView) findViewById(R.id.txtGold);
+        highScoreTxt = (TextView) findViewById(R.id.txtHighScore);
+        currentScoreTxt = (TextView) findViewById(R.id.txtScore);
+        nextlevelScore = (TextView) findViewById(R.id.txtNextLevelScore);
 
         // Displaying information.
-        damageTxt.setTextSize(16);
-        damageTxt.setTextColor(Color.WHITE);
         damageTxt.setText(String.valueOf("DMG: " + playerController.getDamage()));
-        damageTxt.setTypeface(null, Typeface.BOLD);
-
-        nextlevelScore.setTextSize(24);
-        nextlevelScore.setTextColor(Color.WHITE);
         nextlevelScore.setText(String.valueOf(currentScore) + " / " + String.valueOf(neededScore));
-        nextlevelScore.setTypeface(null, Typeface.BOLD);
-        playerGold.setTextColor(Color.WHITE);
-        playerGold.setTextSize(24);
         playerGold.setText("G: " + playerController.getGold());
-        playerGold.setTypeface(null, Typeface.BOLD);
-        highScoreTxt.setTextSize(24);
-        highScoreTxt.setTypeface(null, Typeface.BOLD);
-        currentScoreTxt.setTextSize(24);
-        currentScoreTxt.setTypeface(null, Typeface.BOLD);
         currentScoreTxt.setText(String.valueOf(currentScore));
         highScore = Integer.valueOf(database.getHighscore());
 
@@ -990,15 +583,8 @@ public class PlayScreen extends AppCompatActivity {
         upgradecostAttackspeed = 100;
         changeScoreBar(highScore);
         changeScoreBar(score);
-
-        // Creating a new player.
-        createPlayer();
-        // Initialize screens.
-        // Get enemy sprite direction.
-        enemyAnimation(direction);
-        // Damage enemy by locating it's direction.
-        damageAnimation(direction);
-
+        enemyAnimation(direction); // Get enemy sprite direction.
+        damageAnimation(direction); // Damage enemy by locating it's direction.
         showBeforePlayScreen();
     }
 
@@ -1007,66 +593,46 @@ public class PlayScreen extends AppCompatActivity {
     It provides a beginning X and Y coordinates
     and sprite animation.
      */
-    public void createEnemy(){
-        // Enemy position
-        enemyController.setGold(enemyController.randomEnemyGold());
-        enemyMovement1 = 0;
-        enemyMovement2 = 855;
-        enemyMovement3 = 1435;
-        enemyNameMovement1 = 0;
-        enemyNameMovement2 = 855;
-        enemyNameMovement3 = 1435;
-
-        // Getting the begin coordinates for each enemy.
-        direction = enemyCoordinates.createCoordinates();
-        x = enemyCoordinates.getxPos();
-        y = enemyCoordinates.getyPos();
-
-        // Enemy health.
-        enemyHealthBar1 = 0;
-        enemyHealthBar2 = 855;
-        enemyHealthBar3 = 1685;
-        enemyHealthShow1 = 0;
-        enemyHealthShow2 = 855;
-        enemyHealthShow3 = 1705;
-        enemyHealthCounter += 1;
-        //if(healthBar.getProgress() <= 1){
-        //    enemyHealthCounter = 1;
-        //}
+    public void createEnemy() {
+        coords = enemyController.createEnemy(direction); // Generate enemy position
+        direction = coords[2];
+        enemyHealthCounter += 1; // Upgrades health of enemy
+        enemyHealthBegin += 1; // Upgrades health of enemy
+        enemyController.setHealth(enemyHealthCounter); // Setting the new health of the enemy
 
         // Creating views.
         enemyHealth = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
         enemyHealthTxt = new TextView(this);
+        enemyHealthTxt.setTextColor(Color.YELLOW);
         enemyName = new TextView(this);
+        enemyName.setTextColor(Color.YELLOW);
+        enemyName.setText(String.valueOf(EnemyNames.Bronze_Warrior));
         enemy = new ImageView(this);
 
         // Displaying information per enemy.
-        enemyController.setHealth(enemyHealthCounter);
         enemyHealth.setMax(enemyController.getHealth());
         enemyHealth.setProgress(enemyController.getHealth());
         enemyHealth.getProgressDrawable().setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
-        enemyHealthBegin += 1;
-        //if(healthBar.getProgress() <= 1){
-        //    enemyHealthBegin = 1;
-        //}
-        enemyHealth.setX(x);
-        enemyHealth.setY(y + 150);
-        enemyHealthTxt.setTextColor(Color.WHITE);
-        enemyHealthTxt.setTypeface(null, Typeface.BOLD);
-        enemyHealthTxt.setX(x);
-        enemyHealthTxt.setY(y + 170);
 
         // If statement for correcting the layout of displaying health.
-        if(enemyHealthBegin >= 10){
+        if (enemyHealthBegin >= 10) {
             enemyHealthTxt.setText(String.valueOf(enemyHealthBegin + " / " + enemyController.getHealth()));
-        }else{
+        } else {
             enemyHealthTxt.setText(String.valueOf("  " + enemyHealthBegin + " / " + enemyController.getHealth()));
         }
 
         // Adding the actual views to the playground.
         enemy.setImageResource(R.mipmap.ic_launcher);
-        enemy.setX(x);
-        enemy.setY(y);
+        enemy.setX(coords[0]); // X postiion of enemy
+        enemy.setY(coords[1]); // Y position of enemy
+        enemyHealth.setX(coords[0]); // X position of health display
+        enemyHealth.setY(coords[1]); // Y position of health display
+        enemyHealthTxt.setX(coords[0]); // X position of health text display
+        enemyHealthTxt.setY(coords[1] - 40); // Y position of health text display
+        enemyName.setX(coords[0] - 40); // X position of enemy name
+        enemyName.setY(coords[1] - 80); // Y position of enemy name
+        checkEnemyPosition();
+
         linearLayout.addView(enemy);
         linearLayout.addView(enemyHealth);
         linearLayout.addView(enemyHealthTxt);
@@ -1074,7 +640,7 @@ public class PlayScreen extends AppCompatActivity {
         spriteDirection(direction);
 
         // Attack an enemy untill it is killed an created again
-        if(IS_KILLABLE){
+        if (IS_KILLABLE) {
             damageEnemy();
         }
     }
@@ -1082,20 +648,18 @@ public class PlayScreen extends AppCompatActivity {
     /*
     This method damages an enemy for each tap/damage it gets.
      */
-    public void damageEnemy(){
+    public void damageEnemy() {
         // Attack an enemy untill it is killed an created again
         enemy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!IS_SHOOTING){
+                if (!IS_SHOOTING) {
                     // Set the movement beginning position
-                    damageMovement1 = 465;
-                    damageMovement2 = 495;
-                    damageMovement3 = 900;
+                    playerController.damageMovement1 = 465;
+                    playerController.damageMovement2 = 495;
+                    playerController.damageMovement3 = 900;
                     enemy.setClickable(false);
-
-                    // Add the damage to the screen
-                    linearLayout.addView(damage);
+                    linearLayout.addView(damage); // Add the damage to the screen
 
                     // Get and set the coordinates to the damage
                     damageCoordinates.createCoordinates(direction);
@@ -1104,10 +668,8 @@ public class PlayScreen extends AppCompatActivity {
                     damage.setY(damageY);
                     damage.setX(damageX);
 
-                    // Player sprite points towards enemy
-                    // Shoots enemy with an animation that is executed one time only per shot
-                    characterAnimation(direction);
-                    damageAnimation(direction);
+                    characterAnimation(direction); // Player sprite points towards enemy
+                    damageAnimation(direction); // Shoots enemy with an animation that is executed one time only per shot
                     player.setImageResource(0);
                     player.setBackgroundDrawable(characterspriteAnim);
                     characterspriteAnim.start();
@@ -1121,8 +683,8 @@ public class PlayScreen extends AppCompatActivity {
         });
     }
 
-    public void spriteDirection(int direction){
-        switch(direction){
+    public void spriteDirection(int direction) {
+        switch (direction) {
             case 0:
                 enemy.setImageResource(R.drawable.enemy1sword1);
                 enemyAnimation(direction);
@@ -1141,129 +703,24 @@ public class PlayScreen extends AppCompatActivity {
         }
     }
 
-    public void getDamageDirectionLogic(){
-        switch(direction){
-            case 0:
-                damage.setImageResource(0);
-                damage.setBackgroundDrawable(characterDamageAnimation);
-                characterDamageAnimation.start();
-                damageMovement1 -= playerController.getAttackspeed();
-                damage.setX(damageMovement1);
-                break;
-            case 1:
-                damage.setImageResource(0);
-                damage.setBackgroundDrawable(characterDamageAnimation);
-                characterDamageAnimation.start();
-                damageMovement2 += playerController.getAttackspeed();
-                damage.setX(damageMovement2);
-                break;
-            case 2:
-                damage.setImageResource(0);
-                damage.setBackgroundDrawable(characterDamageAnimation);
-                characterDamageAnimation.start();
-                damageMovement3 += playerController.getAttackspeed();
-                damage.setY(damageMovement3);
-                break;
-        }
+    public void getDamageDirection(int direction) {
+        playerController.getDamageDirectionLogic(direction, damage, characterDamageAnimation);
+        playerController.getDamageDirection(direction, PlayScreen.this);
     }
 
-    public void getDamageDirection(int direction){
-        Intent intent = getIntent();
-        switch(direction){
-            case 0:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    getDamageDirectionLogic();
-                }
-
-                break;
-            case 1:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    getDamageDirectionLogic();
-                }
-                break;
-            case 2:
-                if(intent.getIntExtra("archer", 0) == 1){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("wizard", 0) == 2){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("axethrower", 0) == 3){
-                    getDamageDirectionLogic();
-                }
-                else if(intent.getIntExtra("necromancer", 0) == 4){
-                    getDamageDirectionLogic();
-                }
-                break;
-        }
+    public void getEnemyDirection(int direction) {
+        enemyController.getEnemyDirection(direction, enemy, enemySpriteAnimation, enemyHealth, enemyHealthTxt, enemyName);
     }
 
-    public void getEnemyDirection(int direction){
-        switch(direction){
-            case 0:
-                enemyMovement1 += 1;
-                enemyHealthBar1 += 1;
-                enemyHealthShow1 += 1;
-                enemy.setImageResource(0);
-                enemy.setBackgroundDrawable(enemySpriteAnimation);
-                enemySpriteAnimation.start();
-                enemy.setX(enemyMovement1);
-                enemyHealth.setX(enemyHealthBar1);
-                enemyHealthTxt.setX(enemyHealthShow1);
-                break;
-            case 1:
-                enemyMovement2 -= 1;
-                enemyHealthBar2 -= 1;
-                enemyHealthShow2 -= 1;
-                enemy.setImageResource(0);
-                enemy.setBackgroundDrawable(enemySpriteAnimation);
-                enemySpriteAnimation.start();
-                enemy.setX(enemyMovement2);
-                enemyHealth.setX(enemyHealthBar2);
-                enemyHealthTxt.setX(enemyHealthShow2);
-                break;
-            case 2:
-                enemyMovement3 -= 1;
-                enemyHealthBar3 -= 1;
-                enemyHealthShow3 -= 1;
-                enemy.setImageResource(0);
-                enemy.setBackgroundDrawable(enemySpriteAnimation);
-                enemySpriteAnimation.start();
-                enemy.setY(enemyMovement3);
-                enemyHealth.setY(enemyHealthBar3);
-                enemyHealthTxt.setY(enemyHealthShow3);
-                break;
-        }
-    }
-
-    public void checkLevelRequirement(){
-        if(currentScore >= neededScore){
+    public void checkLevelRequirement() {
+        if (currentScore >= neededScore) {
             neededScore *= 3.4;
             nextlevelScore.setText(String.valueOf(currentScore) + " / " + String.valueOf(neededScore));
-
             nextLevel();
         }
     }
 
-    public void nextLevel(){
+    public void nextLevel() {
         countDownMovement.cancel();
         damageMovement.cancel();
 
@@ -1271,6 +728,7 @@ public class PlayScreen extends AppCompatActivity {
         linearLayout.removeView(enemy);
         linearLayout.removeView(enemyHealth);
         linearLayout.removeView(enemyHealthTxt);
+        linearLayout.removeView(enemyName);
 
         final Dialog nextLevel = new Dialog(PlayScreen.this);
         nextLevel.setCanceledOnTouchOutside(false);
@@ -1287,7 +745,7 @@ public class PlayScreen extends AppCompatActivity {
                 mapscreen.setCanceledOnTouchOutside(false);
                 mapscreen.setCancelable(false);
                 mapscreen.setContentView(R.layout.mapoverlay_screen);
-                ImageView showMap  = (ImageView)mapscreen.findViewById(R.id.mapOverlay);
+                ImageView showMap = (ImageView) mapscreen.findViewById(R.id.mapOverlay);
                 showMap.setImageResource(R.drawable.backgroundmap);
 
                 Button btnGetNextLevel = (Button) mapscreen.findViewById(R.id.dismissPopup);
@@ -1309,79 +767,8 @@ public class PlayScreen extends AppCompatActivity {
         nextLevel.show();
     }
 
-    public void getPlayscreenLevel(){
-        Intent intent = getIntent();
-        //level = intent.getIntExtra("level", 0);
-        switch(level){
-            case 1:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl1);
-                checkLevelRequirement();
-                break;
-            case 2:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl2);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel2();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            case 3:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl3v2);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel3();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            case 4:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl4);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel4();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            case 5:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl5);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel5();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            case 6:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl6);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel6();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            case 7:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl7);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel7();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            case 8:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl8);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel8();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            case 9:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl9);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel9();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-            default:
-                // Setting a background for the playfield.
-                linearLayout.setBackgroundResource(R.drawable.backgroundlvl8);
-                backgroundAnimation = backgroundAnimationController.getPlayscreenBackgroundlevel8();
-                linearLayout.setBackgroundDrawable(backgroundAnimation);
-                backgroundAnimation.start();
-                break;
-        }
+    public void getPlayscreenLevel() {
+        backgroundAnimationController.getPlayscreenLevel(level, linearLayout, backgroundAnimation);
     }
 
     @Override

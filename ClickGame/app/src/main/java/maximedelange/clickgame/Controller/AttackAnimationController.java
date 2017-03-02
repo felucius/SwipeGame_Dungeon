@@ -1,6 +1,8 @@
 package maximedelange.clickgame.Controller;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -402,5 +404,60 @@ public class AttackAnimationController {
         }
 
         return attack;
+    }
+
+    /*
+Animation of the character damage to a certain position
+*/
+    public AnimationDrawable damageAnimation(int enemyDirection, Activity getActivity){
+        AnimationDrawable characterDamageAnimation = null;
+
+        Intent intent = getActivity.getIntent();
+        switch(enemyDirection){
+            case 0:
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterDamageAnimation = getArrowLeft();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterDamageAnimation = getSpellLeft();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterDamageAnimation = getAxeLeft();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterDamageAnimation = getNecroSpellLeft();
+                }
+                break;
+            case 1:
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterDamageAnimation = getArrowRight();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterDamageAnimation = getSpellRight();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterDamageAnimation = getAxeRight();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterDamageAnimation = getNecroSpellRight();
+                }
+                break;
+            case 2:
+                if(intent.getIntExtra("archer", 0) == 1){
+                    characterDamageAnimation = getArrowDown();
+                }
+                else if(intent.getIntExtra("wizard", 0) == 2){
+                    characterDamageAnimation = getSpellDown();
+                }
+                else if(intent.getIntExtra("axethrower", 0) == 3){
+                    characterDamageAnimation = getAxeDown();
+                }
+                else if(intent.getIntExtra("necromancer", 0) == 4){
+                    characterDamageAnimation = getNecroSpellDown();
+                }
+                break;
+        }
+
+        return characterDamageAnimation;
     }
 }

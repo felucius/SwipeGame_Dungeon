@@ -60,4 +60,22 @@ public class EnemyAnimationController {
 
         return enemy;
     }
+
+    public AnimationDrawable enemyAnimation(int direction){
+        AnimationDrawable enemySpriteAnimation = null;
+
+        switch(direction){
+            case 0:
+                enemySpriteAnimation = getEnemyLevel1Left();
+                break;
+            case 1:
+                enemySpriteAnimation = getEnemyLevel1Right();
+                break;
+            case 2:
+                enemySpriteAnimation = getEnemyLevel1Up();
+                break;
+        }
+
+        return enemySpriteAnimation;
+    }
 }
