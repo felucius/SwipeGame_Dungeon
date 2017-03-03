@@ -124,7 +124,8 @@ public class PlayScreen extends AppCompatActivity {
     to know in which way the enemy needs to animate.
     */
     public void enemyAnimation(int direction) {
-        enemySpriteAnimation = enemyAnimationController.enemyAnimation(direction);
+        //enemySpriteAnimation = enemyAnimationController.enemyAnimationLvl1(direction);
+        enemySpriteAnimation = enemyAnimationController.checkLevel(level, direction);
     }
 
     /*
@@ -456,6 +457,8 @@ public class PlayScreen extends AppCompatActivity {
         if (Rect.intersects(playerCollision, enemyCollision)) {
             // Player has been killed. Specs are being set for the death of the player.
             if (healthBar.getProgress() <= 1) {
+                level = 1;
+                enemyAnimationController.checkLevel(level, direction);
                 // Displaying the new information.
                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + 0));
                 healthBar.setProgress(0);
@@ -467,6 +470,7 @@ public class PlayScreen extends AppCompatActivity {
                 linearLayout.removeView(enemy);
                 linearLayout.removeView(enemyHealth);
                 linearLayout.removeView(enemyHealthTxt);
+                linearLayout.removeView(enemyName);
             } else {
                 IS_COLLIDING = true;
                 // Setting new player health after attack.
@@ -599,6 +603,7 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealthCounter += 1; // Upgrades health of enemy
         enemyHealthBegin += 1; // Upgrades health of enemy
         enemyController.setHealth(enemyHealthCounter); // Setting the new health of the enemy
+        String displayEnemyName = enemyAnimationController.getEnemyName(level);
 
         // Creating views.
         enemyHealth = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
@@ -606,7 +611,7 @@ public class PlayScreen extends AppCompatActivity {
         enemyHealthTxt.setTextColor(Color.YELLOW);
         enemyName = new TextView(this);
         enemyName.setTextColor(Color.YELLOW);
-        enemyName.setText(String.valueOf(EnemyNames.Bronze_Warrior));
+        enemyName.setText(displayEnemyName);
         enemy = new ImageView(this);
 
         // Displaying information per enemy.
@@ -754,6 +759,7 @@ public class PlayScreen extends AppCompatActivity {
                     public void onClick(View v) {
                         mapscreen.dismiss();
                         level++;
+                        enemyAnimationController.checkLevel(level, direction); // TODO NOT SURE IF RIGHT
                         getPlayscreenLevel();
                         IS_NEXT_LEVEL = true;
                         showBeforePlayScreen();
