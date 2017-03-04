@@ -248,6 +248,7 @@ public class PlayScreen extends AppCompatActivity {
                             upgradeDialog.create();
                             if (playerController.getGold() >= upgradecostHealth) {
                                 upgradecostHealth = playerController.healthUpgradeLogic(upgradecostHealth);
+                                playerHealthBegin = playerController.getHealth();
                                 playerHealthTxt.setText(String.valueOf(playerHealthBegin + " / " + playerController.getHealth()));
                                 healthBar.setMax(playerController.getHealth());
                                 healthBar.setProgress(playerController.getHealth());
@@ -631,11 +632,11 @@ public class PlayScreen extends AppCompatActivity {
         enemy.setX(coords[0]); // X postiion of enemy
         enemy.setY(coords[1]); // Y position of enemy
         enemyHealth.setX(coords[0]); // X position of health display
-        enemyHealth.setY(coords[1]); // Y position of health display
+        enemyHealth.setY(coords[1] - 40); // Y position of health display
         enemyHealthTxt.setX(coords[0]); // X position of health text display
-        enemyHealthTxt.setY(coords[1] - 40); // Y position of health text display
-        enemyName.setX(coords[0] - 40); // X position of enemy name
-        enemyName.setY(coords[1] - 80); // Y position of enemy name
+        enemyHealthTxt.setY(coords[1] - 80); // Y position of health text display
+        enemyName.setX(coords[0]); // X position of enemy name
+        enemyName.setY(coords[1] - 120); // Y position of enemy name
         checkEnemyPosition();
 
         linearLayout.addView(enemy);
@@ -719,7 +720,7 @@ public class PlayScreen extends AppCompatActivity {
 
     public void checkLevelRequirement() {
         if (currentScore >= neededScore) {
-            neededScore *= 3.4;
+            neededScore *= 1.5;
             nextlevelScore.setText(String.valueOf(currentScore) + " / " + String.valueOf(neededScore));
             nextLevel();
         }

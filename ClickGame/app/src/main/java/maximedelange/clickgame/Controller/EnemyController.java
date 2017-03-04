@@ -24,9 +24,6 @@ public class EnemyController {
     private Random amountOfDamage = null;
     private EnemyCoordinates coordinates = null;
     int enemyMovement[], enemyHealthBar[], enemyHealthShow[], enemyNameShow[];
-    //int enemyMovement1 = 0, enemyHealthBar1 = 0, enemyHealthShow1 = 0;
-    //int enemyMovement2 = 0, enemyHealthBar2 = 0, enemyHealthShow2 = 0;
-    //int enemyMovement3 = 0, enemyHealthBar3 = 0, enemyHealthShow3 = 0;
     int enemyHealthCounter = 0;
     private int enemyHealthBegin = 0;
 
@@ -108,7 +105,7 @@ public class EnemyController {
                 enemyMovement[1] = 885;
                 enemyHealthBar[1] = 885;
                 enemyHealthShow[1] = 885;
-                enemyNameShow[1] = 815;
+                enemyNameShow[1] = 885;
                 enemy.setX(enemyMovement[1]);
                 enemyHealth.setX(enemyHealthBar[1]);
                 enemyHealthTxt.setX(enemyHealthShow[1]);

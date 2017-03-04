@@ -92,14 +92,10 @@ public class BackgroundAnimationController {
     }
 
     public void getPlayscreenLevel(int level, RelativeLayout linearLayout, AnimationDrawable backgroundAnimation){
-        //Intent intent = get.getIntent();
-        //level = intent.getIntExtra("level", 0);
-
         switch(level){
             case 1:
                 // Setting a background for the playfield.
                 linearLayout.setBackgroundResource(R.drawable.backgroundlvl1);
-                //checkLevelRequirement();
                 break;
             case 2:
                 // Setting a background for the playfield.

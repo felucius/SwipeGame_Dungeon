@@ -7,8 +7,10 @@ package maximedelange.clickgame.Domain;
 public enum EnemyNames {
     Bronze_Warrior,
     Iron_Warrior,
-    Steel_Warrior,
     Dark_Knight,
-    Blue_paladin
+    Steel_Warrior,
+    Blue_paladin,
+    Green_Crusader,
+    Red_Commander
 
 }
