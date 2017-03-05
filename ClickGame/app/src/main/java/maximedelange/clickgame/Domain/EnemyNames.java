@@ -11,6 +11,6 @@ public enum EnemyNames {
     Steel_Warrior,
     Blue_paladin,
     Green_Crusader,
-    Red_Commander
-
+    Red_Commander,
+    Purple_Tank
 }

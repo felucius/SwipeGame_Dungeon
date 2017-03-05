@@ -297,6 +297,45 @@ public class EnemyAnimationController {
         return enemy;
     }
 
+    public AnimationDrawable getEnemyLevel8Left(){
+        enemy = new AnimationDrawable();
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordleft1), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordleft2), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordleft3), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordleft4), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordleft5), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordleft6), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordleft7), 150);
+
+        return enemy;
+    }
+
+    public AnimationDrawable getEnemyLevel8Right(){
+        enemy = new AnimationDrawable();
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordright1), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordright2), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordright3), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordright4), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordright5), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordright6), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordright7), 150);
+
+        return enemy;
+    }
+
+    public AnimationDrawable getEnemyLevel8Up(){
+        enemy = new AnimationDrawable();
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordup1), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordup2), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordup3), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordup4), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordup5), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordup6), 150);
+        enemy.addFrame(context.getResources().getDrawable(R.drawable.enemy8swordup7), 150);
+
+        return enemy;
+    }
+
     public AnimationDrawable enemyAnimationLvl1(int direction){
         AnimationDrawable enemySpriteAnimation = null;
 
@@ -423,6 +462,24 @@ public class EnemyAnimationController {
         return enemySpriteAnimation;
     }
 
+    public AnimationDrawable enemyAnimationLvl8(int direction){
+        AnimationDrawable enemySpriteAnimation = null;
+
+        switch(direction){
+            case 0:
+                enemySpriteAnimation = getEnemyLevel8Left();
+                break;
+            case 1:
+                enemySpriteAnimation = getEnemyLevel8Right();
+                break;
+            case 2:
+                enemySpriteAnimation = getEnemyLevel8Up();
+                break;
+        }
+
+        return enemySpriteAnimation;
+    }
+
     public AnimationDrawable checkLevel(int level, int direction){
         AnimationDrawable enemySpriteAnimation = null;
 
@@ -447,6 +504,9 @@ public class EnemyAnimationController {
                 break;
             case 7:
                 enemySpriteAnimation = enemyAnimationLvl7(direction);
+                break;
+            case 8:
+                enemySpriteAnimation = enemyAnimationLvl8(direction);
                 break;
             default:
                 enemySpriteAnimation = enemyAnimationLvl1(direction);
@@ -479,6 +539,9 @@ public class EnemyAnimationController {
                 break;
             case 7:
                 enemyName = String.valueOf(EnemyNames.Red_Commander);
+                break;
+            case 8:
+                enemyName = String.valueOf(EnemyNames.Purple_Tank);
                 break;
             default:
                 enemyName = String.valueOf(EnemyNames.Bronze_Warrior);
